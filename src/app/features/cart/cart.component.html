@@ -1,1 +1,102 @@
-<p>cart works!</p>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Tu Carrito</h1>
+
+    <!-- Carrito Vacío -->
+    <ng-container *ngIf="cart$ | async as cart">
+        <div *ngIf="cart.length === 0" class="bg-white rounded-lg shadow-md p-8 text-center">
+            <img src="assets/empty-cart.svg" alt="Carrito vacío" class="w-40 h-40 mx-auto mb-4 animate-pulse">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-3">Tu carrito está vacío</h2>
+            <p class="text-gray-500 mb-6">Parece que aún no has añadido ningún producto a tu carrito.</p>
+            <a routerLink="/products-list"
+                class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300">
+                Ver productos
+            </a>
+        </div>
+
+        <!-- Carrito con Productos -->
+        <div *ngIf="cart.length > 0" class="flex flex-col lg:flex-row gap-8">
+            <!-- Lista de Productos -->
+            <div class="lg:w-2/3">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <!-- Encabezado -->
+                    <div class="bg-gray-50 p-4 border-b">
+                        <h2 class="text-lg font-semibold text-gray-700">Productos ({{cart.length}})</h2>
+                    </div>
+
+                    <!-- Productos -->
+                    <div *ngFor="let item of cart$ | async; let last = last"
+                        class="flex flex-col sm:flex-row items-center p-4" [ngClass]="{'border-b': !last}">
+                        <!-- Imagen -->
+                        <img [src]="item.product.imgUrl" [alt]="item.product.name"
+                            class="w-24 h-24 object-cover rounded-md">
+
+                        <!-- Detalles -->
+                        <div class="sm:ml-6 flex-grow">
+                            <h3 class="text-lg font-semibold text-gray-800">{{item.product.name}}</h3>
+                            <p class="text-sm text-gray-500 mb-2">{{item.product.description | slice:0:100}}...</p>
+                            <p class="text-blue-600 font-bold">${{item.product.price}}</p>
+                        </div>
+
+                        <!-- Controles de Cantidad -->
+                        <div class="flex items-center mt-4 sm:mt-0">
+                            <button (click)="decreaseQuantity(item)"
+                                class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
+                                <span class="text-gray-600 text-xl">−</span>
+                            </button>
+                            <span class="mx-4 text-gray-700 w-6 text-center">{{item.quantity}}</span>
+                            <button (click)="increaseQuantity(item)"
+                                class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
+                                <span class="text-gray-600 text-xl">+</span>
+                            </button>
+                        </div>
+
+                        <!-- Botón Eliminar -->
+                        <button (click)="removeFromCart(item)"
+                            class="mt-4 sm:mt-0 sm:ml-6 text-red-500 hover:text-red-700 transition-colors">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ng-container>
+
+            <!-- Resumen de Compra -->
+            <!-- <div class="lg:w-1/3">
+                <div class="bg-white rounded-lg shadow-md p-6 sticky top-20">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-4">Resumen de Compra</h2>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Subtotal</span>
+                            <span class="font-medium">${{subtotal | number:'1.2-2'}}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Envío</span>
+                            <span class="font-medium">${{shipping | number:'1.2-2'}}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Impuestos</span>
+                            <span class="font-medium">${{taxes | number:'1.2-2'}}</span>
+                        </div>
+                        <div class="border-t pt-3 mt-3">
+                            <div class="flex justify-between font-bold text-lg">
+                                <span>Total</span>
+                                <span>${{total | number:'1.2-2'}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button (click)="checkout()"
+                        class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition duration-300 flex items-center justify-center">
+                        <span>Proceder al Pago</span>
+                        <span class="material-symbols-outlined ml-2">arrow_forward</span>
+                    </button>
+
+                    <p class="text-xs text-gray-500 text-center mt-4">
+                        Los precios pueden cambiar según la disponibilidad y envío
+                    </p>
+                </div>
+            </div> -->
+</div>
