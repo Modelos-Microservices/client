@@ -9,17 +9,16 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class RoleGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): boolean | UrlTree {
-    const keycloak = this.authService.getKeycloakInstance();
-    const isLoggedIn = keycloak.authenticated;
+    const roles = this.authService.getKeycloakInstance()?.tokenParsed?.realm_access?.roles || [];
 
-    if (!isLoggedIn) {
-      return this.router.createUrlTree(['/login']);
+    if (roles.includes('admin')) {
+      return true;
     }
 
-    return true;
+    return this.router.createUrlTree(['/unauthorized']);
   }
 }
