@@ -1,0 +1,21 @@
+header {
+    background: transparent;
+    animation: header-blur-scroll 0.8s linear both;
+    animation-timeline: scroll();
+    animation-range: 0 300px;
+    border-bottom: 1px solid transparent;
+  }
+
+  @keyframes header-blur-scroll {
+    0% {
+      backdrop-filter: blur(0px);
+      background: transparent;
+    }
+
+    100% {
+      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.5);
+      padding-bottom: var(--spacing-6);
+      border-bottom-color: black;
+    }
+  }
