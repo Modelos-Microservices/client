@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, from, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, from, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import Keycloak from 'keycloak-js';
 import { Router } from '@angular/router';
@@ -24,6 +24,9 @@ export class AuthService {
 
   private isAuthenticated = false;
   private userProfile: any = null;
+  private authStatusSubject = new BehaviorSubject<boolean>(false);
+  public authStatus$ = this.authStatusSubject.asObservable();
+
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -36,6 +39,7 @@ export class AuthService {
           silentCheckSsoRedirectUri: window.location.origin + 'assets/silent-check-sso.html',
         });
       this.isAuthenticated = authenticated;
+      this.authStatusSubject.next(authenticated); // Emitir el estado de autenticación
       if (authenticated) {
         this.loadUserProfile();
       }
@@ -51,7 +55,7 @@ export class AuthService {
     const url = `${this.keycloak.authServerUrl}/realms/${this.keycloak.realm}/protocol/openid-connect/token`;
     const body = new URLSearchParams();
     body.set('client_id', this.keycloak.clientId ?? 'nestjs-app');
-    body.set('client_secret', '0rWWwZf5wJNxoxKnKFe1KrWmSl8W3BLu'); // Añade esta línea
+    body.set('client_secret', '0rWWwZf5wJNxoxKnKFe1KrWmSl8W3BLu');
     body.set('grant_type', 'password');
     body.set('username', username);
     body.set('password', password);
@@ -82,6 +86,8 @@ export class AuthService {
     this.isAuthenticated = false;
     this.userProfile = null;
 
+    this.authStatusSubject.next(false); // Emitir el estado de autenticación
+
     // Opcional: redirigir a Keycloak para cerrar sesión completamente
     this.keycloak.logout({ redirectUri: window.location.origin });
   }
@@ -100,6 +106,8 @@ export class AuthService {
   isLoggedIn(): boolean {
     return this.isAuthenticated || !!localStorage.getItem('token');
   }
+
+  
 
   // Carga el perfil del usuario autenticado
   private loadUserProfile(): void {
