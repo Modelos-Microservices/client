@@ -1,11 +1,38 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AuthService } from '../../../core/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [ CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+// ...existing code...
 
+export class HeaderComponent implements OnInit, OnDestroy {
+  isLoggedIn: boolean = false;
+  private authSubscription!: Subscription;
+
+  constructor(private authService: AuthService) { }
+
+  ngOnInit(): void {
+    // Comprueba el estado inicial
+    this.isLoggedIn = this.authService.isLoggedIn();
+    
+    // Suscribirse a cambios futuros en el estado de autenticación
+    this.authSubscription = this.authService.authStatus$.subscribe(
+      status => {
+        this.isLoggedIn = status;
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    // Importante para evitar memory leaks
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
 }

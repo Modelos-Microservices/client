@@ -22,8 +22,11 @@
                 <a href="/products-list" class="text-gray-600 hover:text-gray-800 font-medium">
                     Productos
                 </a>
-                <a href="/login" class="text-gray-600 hover:text-gray-800 font-medium">
+                <a *ngIf="!isLoggedIn" href="/login" class="text-gray-600 hover:text-gray-800 font-medium">
                     Iniciar Sesión
+                </a>
+                <a *ngIf="isLoggedIn" href="/logout" class="text-gray-600 hover:text-gray-800 font-medium">
+                    Cerrar Sesión
                 </a>
             </div>
 
