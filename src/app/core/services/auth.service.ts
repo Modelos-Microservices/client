@@ -1,132 +1,132 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, from, of, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { computed, Injectable, Signal } from '@angular/core';
 import Keycloak from 'keycloak-js';
-import { Router } from '@angular/router';
-
-export interface AuthResponse {
-  access_token: string;
-  refresh_token: string;
-  token_type: string;
-  expires_in: number;
-}
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private keycloak = new Keycloak({
-    url: 'http://localhost:8080', // URL base de tu servidor Keycloak
-    realm: 'nestjs-realm',        // El nombre de tu realm
-    clientId: 'nestjs-app'        // El ID del cliente que usas
-  });
+  public url = 'http://localhost:3000/api/';
+  private keycloak: Keycloak;
+  // BehaviorSubject: Es un tipo especial de Observable de RxJS que almacena el último valor emitido y lo entrega inmediatamente a cualquier nuevo suscriptor. También necesita un valor inicial.
 
-  private isAuthenticated = false;
-  private userProfile: any = null;
-  private authStatusSubject = new BehaviorSubject<boolean>(false);
-  public authStatus$ = this.authStatusSubject.asObservable();
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  private tokenSubject = new BehaviorSubject<string | null>(null);
+  private user_role = new BehaviorSubject<string[] | null>(null);
+  //un observable es una forma de manejar datos asíncronos en JavaScript. En este caso, se está utilizando para manejar el estado de autenticación y el token de acceso. y podemos suscribirnos a él para recibir actualizaciones. desde otros servicios o componentes.
+  public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  public token$ = this.tokenSubject.asObservable();
+  public role = this.user_role.asObservable()
+  private validRoles: string[] = ['admin', 'user']
 
 
-  constructor(private http: HttpClient, private router: Router) { }
-
-  // Inicializa Keycloak al inicio de la aplicación
-  async init(): Promise<boolean> {
-    try {
-      const authenticated = await this.keycloak
-        .init({
-          onLoad: 'check-sso', // Cambiado a check-sso para evitar redirecciones automáticas
-          silentCheckSsoRedirectUri: window.location.origin + 'assets/silent-check-sso.html',
-        });
-      this.isAuthenticated = authenticated;
-      this.authStatusSubject.next(authenticated); // Emitir el estado de autenticación
-      if (authenticated) {
-        this.loadUserProfile();
-      }
-      return authenticated;
-    } catch (error) {
-      console.error('Error al inicializar Keycloak:', error);
-      return false;
-    }
+  get isLoggedIn(): boolean {
+    return this.isLoggedInSubject.value;
   }
 
-  // Método para iniciar sesión con email y password
-  login(username: string, password: string): Observable<boolean> {
-    const url = `${this.keycloak.authServerUrl}/realms/${this.keycloak.realm}/protocol/openid-connect/token`;
-    const body = new URLSearchParams();
-    body.set('client_id', this.keycloak.clientId ?? 'nestjs-app');
-    body.set('client_secret', '0rWWwZf5wJNxoxKnKFe1KrWmSl8W3BLu');
-    body.set('grant_type', 'password');
-    body.set('username', username);
-    body.set('password', password);
+  get token(): string | null {
+    return this.tokenSubject.value;
+  }
 
+  public getToken(): string | null {
+    return this.tokenSubject.value;
+  }
 
-    return this.http.post<AuthResponse>(url, body.toString(), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    }).pipe(
-      tap(response => {
-        localStorage.setItem('token', response.access_token ?? '');
-        localStorage.setItem('refresh_token', response.refresh_token ?? '');
-        this.isAuthenticated = true;
-      }),
-      map(() => true),
-      catchError(error => {
-        console.error('Error de inicio de sesión:', error);
-        return throwError(() => new Error('Credenciales inválidas'));
+  get backendUrl(): string {
+    return this.url;
+  }
+
+  getKeycloakInstance() {
+    return this.keycloak
+  }
+
+  constructor() {
+
+    this.keycloak = new Keycloak({
+      url: 'http://localhost:8080/',
+      realm: 'nestjs-realm',
+      clientId: 'angular-app'
+    });
+  }
+
+  public initKeycloak(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      //el metodo init permite inicializar la instancia de Keycloak y establecer la configuración inicial.
+      this.keycloak.init({
+        onLoad: 'check-sso',
       })
-    );
+        //en caso de ser exitoso
+        .then(authenticated => {
+          if (authenticated) {
+            // actualiza el estado de autenticación a 'true'
+            this.isLoggedInSubject.next(true);
+            // una vez autenticado, se puede acceder al token de acceso
+            if (this.keycloak.token) {
+              this.tokenSubject.next(this.keycloak.token);
+              this.user_role.next(this.getUserRole())
+            }
+            console.log('Usuario autenticado');
+            console.log(this.isLoggedIn);
+          } else {
+            console.log('No autenticado');
+          }
+          //Resuelve la Promesa que creaste en la línea 27 con el estado de autenticación. Esto es lo que recibirá quien llame a 'initKeycloak()'.
+          resolve(authenticated);
+        })
+        .catch(error => {
+          console.error('Error al inicializar Keycloak', error);
+          reject(error);
+        });
+    });
   }
 
-  // Método para cerrar sesión
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refresh_token');
-    this.isAuthenticated = false;
-    this.userProfile = null;
-
-    this.authStatusSubject.next(false); // Emitir el estado de autenticación
-
-    // Opcional: redirigir a Keycloak para cerrar sesión completamente
-    this.keycloak.logout({ redirectUri: window.location.origin });
+  // función para refrescar el token de acceso
+  public logout(): void {
+    // función para cerrar sesión globalmente
+    this.keycloak.logout()
+      .then(() => {
+        this.tokenSubject.next(null);
+        this.isLoggedInSubject.next(false);
+      })
+      .catch(error => console.error('Error al cerrar sesión', error));
   }
 
-  // Obtener token para el interceptor
-  getToken(): string | null {
-    // Primero intenta obtener el token de Keycloak
-    if (this.keycloak.token) {
-      return this.keycloak.token;
+
+  public async login(): Promise<void> {
+    try {
+      await this.keycloak.login();
+    } catch (error) {
     }
-    // Si no hay token en Keycloak, intenta obtenerlo del localStorage
-    return localStorage.getItem('token');
   }
 
-  // Verifica si el usuario está autenticado
-  isLoggedIn(): boolean {
-    return this.isAuthenticated || !!localStorage.getItem('token');
-  }
-
-  
-
-  // Carga el perfil del usuario autenticado
-  private loadUserProfile(): void {
-    if (this.isAuthenticated) {
-      this.keycloak.loadUserProfile().then(profile => {
-        this.userProfile = profile;
-      }).catch(error => {
-        console.error('Error al cargar el perfil del usuario:', error);
-      });
+  private getUserRole() {
+    if (this.isLoggedIn && this.token) {
+      const tokenDecode = this.decodeToken(this.token)
+      if (tokenDecode?.realm_access?.roles) {
+        return tokenDecode.realm_access.roles.filter((role: string) =>
+          this.validRoles.includes(role)
+        );
+      } else {
+        console.log("you have to log in first")
+      }
     }
   }
 
-  // Obtener información del perfil del usuario
-  getUserProfile(): any {
-    return this.userProfile;
+  private decodeToken(token: string): any {
+    try {
+      // El token JWT tiene 3 partes: header.payload.signature
+      // Nos interesa el payload (parte 2)
+      const payload = token.split('.')[1];
+
+      // Decodificar el base64
+      const decodedPayload = atob(payload);
+
+      // Convertir el JSON string a objeto
+      return JSON.parse(decodedPayload);
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return null;
+    }
   }
 
-  // Acceso directo a la instancia de Keycloak
-  getKeycloakInstance(): Keycloak {
-    return this.keycloak;
-  }
 }

@@ -17,6 +17,8 @@ import { DashboardComponent } from './features/admin/dashboard/dashboard.compone
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 
+import { canActivateAuthRole } from './core/guards/key-cloak.guard';
+
 export const routes: Routes = [
   {
     path: '',
@@ -29,7 +31,7 @@ export const routes: Routes = [
       { path: 'favorites', component: FavoritesComponent },
       { path: 'cart', component: CartComponent },
       { path: 'checkout', component: CheckoutComponent },
-      { path: 'profile', component: ProfileComponent },
+      { path: 'profile', component: ProfileComponent, canActivate: [canActivateAuthRole], data: { role: 'user' } },
     ],
   },
   {

@@ -19,10 +19,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Comprueba el estado inicial
-    this.isLoggedIn = this.authService.isLoggedIn();
+    this.isLoggedIn = this.authService.isLoggedIn;
     
     // Suscribirse a cambios futuros en el estado de autenticación
-    this.authSubscription = this.authService.authStatus$.subscribe(
+    this.authSubscription = this.authService.isLoggedIn$.subscribe(
       status => {
         this.isLoggedIn = status;
       }
@@ -35,4 +35,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.authSubscription.unsubscribe();
     }
   }
+
+   logout(): void {
+    this.authService.logout();
+  }
+
+
+
 }

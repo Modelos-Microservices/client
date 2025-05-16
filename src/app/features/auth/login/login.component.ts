@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-login',
@@ -11,39 +13,51 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private authSub!: Subscription;
+  //  this.router.navigate(['/']);
   private fb = inject(FormBuilder);
+  
+  ngOnInit(): void {
+    // Nos suscribimos al observable isLoggedIn$
+    this.authSub = this.authService.isLoggedIn$.subscribe((loggedIn: boolean) => {
+      if (loggedIn) {
+        this.onUserLoggedIn();
+      } else {
+        this.onUserLoggedOut();
+      }
+    });
+  }
+
+  onUserLoggedIn() {
+    console.log('Usuario ha iniciado sesión. Ejecutando lógica del componente...');
+    this.router.navigate(['/'])
+  }
+
+  onUserLoggedOut() {
+    console.log('Usuario ha cerrado sesión.');
+  }
+
+  ngOnDestroy(): void {
+    if(this.authSub){
+        this.authSub.unsubscribe();
+    }
+  }
 
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
-  isLoading = false;
-  errorMessage = '';
 
-  onSubmit(): void {
-    if (this.loginForm.invalid) {
-      return;
-    }
-
-    this.isLoading = true;
-    this.errorMessage = '';
-
-    const { email, password } = this.loginForm.value;
-
-    this.authService.login(email, password)
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/']);
-        },
-        error: (error) => {
-          this.errorMessage = 'Credenciales inválidas. Por favor, intente de nuevo.';
-          console.error('Error de inicio de sesión:', error);
-          this.isLoading = false;
-        }
-      });
+  public async login(){
+    await this.authService.login()
   }
+
+  logout(): void {
+    this.authService.logout();
+  }
+
 }

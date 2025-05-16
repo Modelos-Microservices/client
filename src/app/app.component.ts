@@ -14,8 +14,12 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.init().then((authenticated) => {
-      console.log('✅ Usuario autenticado:', authenticated);
-    });
+    this.authService.initKeycloak()
+      .then(success => {
+        console.log('Inicialización Keycloak:', success ? 'exitosa' : 'fallida');
+      })
+      .catch(error => {
+        console.error('Error en inicialización:', error);
+      });
   }
 }

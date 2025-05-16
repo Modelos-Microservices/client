@@ -25,7 +25,7 @@ export class ProductService {
   private readonly apiUrl = `${environment.apiUrl}/products`;
   private readonly authService = inject(AuthService); // Inyecta el servicio de autenticación
 
-  
+
 
   // // Me´todo para obtener todos los productos
   // getAllProducts(): Observable<Product[]> {

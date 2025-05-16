@@ -25,9 +25,9 @@
                 <a *ngIf="!isLoggedIn" href="/login" class="text-gray-600 hover:text-gray-800 font-medium">
                     Iniciar Sesión
                 </a>
-                <a *ngIf="isLoggedIn" href="/logout" class="text-gray-600 hover:text-gray-800 font-medium">
-                    Cerrar Sesión
-                </a>
+                <a (click)="logout(); $event.preventDefault()" *ngIf="isLoggedIn" href="/logout" class="text-gray-600 hover:text-gray-800 font-medium">
+  Cerrar Sesión
+</a>
             </div>
 
             <!-- Icons -->
