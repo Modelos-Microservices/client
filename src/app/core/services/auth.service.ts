@@ -28,6 +28,14 @@ export class AuthService {
     return this.tokenSubject.value;
   }
 
+public getUserID(): string | null {
+  if (this.isLoggedIn && this.token) {
+    const payload = this.decodeToken(this.token);
+    return payload?.sub || null; // "sub" es el ID del usuario por defecto en Keycloak
+  }
+  return null;
+}
+
   public getToken(): string | null {
     return this.tokenSubject.value;
   }
@@ -66,7 +74,7 @@ export class AuthService {
               this.user_role.next(this.getUserRole())
             }
             console.log('Usuario autenticado');
-            console.log(this.isLoggedIn);
+
           } else {
             console.log('No autenticado');
           }

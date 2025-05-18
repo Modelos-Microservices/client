@@ -17,7 +17,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
   private authSub!: Subscription;
-  //  this.router.navigate(['/']);
   private fb = inject(FormBuilder);
   
   ngOnInit(): void {
@@ -31,10 +30,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  onUserLoggedIn() {
-    console.log('Usuario ha iniciado sesión. Ejecutando lógica del componente...');
-    this.router.navigate(['/'])
-  }
+ onUserLoggedIn() {
+  console.log('Usuario ha iniciado sesión. Ejecutando lógica del componente...');
+  this.router.navigate(['/']);
+}
 
   onUserLoggedOut() {
     console.log('Usuario ha cerrado sesión.');
