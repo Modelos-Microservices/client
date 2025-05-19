@@ -12,6 +12,7 @@ import { CartComponent } from './features/cart/cart.component';
 import { CheckoutComponent } from './features/checkout/checkout.component';
 import { ProfileComponent } from './features/profile/profile.component';
 import { DashboardComponent } from './features/admin/dashboard/dashboard.component';
+import { ProductCreateComponent } from './features/products/product-create/product-create.component';
 
 // Importar guards
 import { AuthGuard } from './core/guards/auth.guard';
@@ -29,6 +30,7 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'products-list', component: ProductListComponent },
+      { path: 'products-create', component: ProductCreateComponent },
       { path: 'favorites', component: FavoritesComponent },
       { path: 'cart', component: CartComponent },
       { path: 'checkout', component: CheckoutComponent },
