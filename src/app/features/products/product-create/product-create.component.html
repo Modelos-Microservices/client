@@ -1,0 +1,200 @@
+<!-- crear nuevo producto -->
+<div class="container mx-auto px-4 py-16">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Crear Nuevo Producto</h1>
+  <form (ngSubmit)="createProduct()" #productForm="ngForm" class="bg-white shadow-md rounded-lg p-6">
+    <div class="mb-4">
+      <label for="name" class="block text-gray-700 font-bold mb-2">Nombre del Producto</label>
+      <input type="text" id="name" [(ngModel)]="newProduct.name" name="name" required class="w-full border rounded-lg px-3 py-2">
+    </div>
+    <div class="mb-4">
+      <label for="description" class="block text-gray-700 font-bold mb-2">Descripción</label>
+      <textarea id="description" [(ngModel)]="newProduct.description" name="description" required class="w-full border rounded-lg px-3 py-2"></textarea>
+    </div>
+    <div class="mb-4">
+      <label for="price" class="block text-gray-700 font-bold mb-2">Precio</label>
+      <input type="number" id="price" [(ngModel)]="newProduct.price" name="price" required class="w-full border rounded-lg px-3 py-2">
+    </div>
+    <div class="mb-4">
+      <label for="stock" class="block text-gray-700 font-bold mb-2">Stock</label>
+      <input type="number" id="stock" [(ngModel)]="newProduct.stock" name="stock" required class="w-full border rounded-lg px-3 py-2">
+    </div>
+    <div class="mb-4">
+      <label for="available" class="block text-gray-700 font-bold mb-2">Disponible</label>
+      <select id="available" [(ngModel)]="newProduct.available" name="available" required class="w-full border rounded-lg px-3 py-2">
+        <option [ngValue]="true">Sí</option>
+        <option [ngValue]="false">No</option>
+      </select>
+    </div>
+    <div class="mb-4">
+      <label for="categoryId" class="block text-gray-700 font-bold mb-2">ID de Categoría</label>
+      <input type="text" id="categoryId" [(ngModel)]="newProduct.categoryId" name="categoryId" required class="w-full border rounded-lg px-3 py-2">
+    </div>
+    <div class="mb-4">
+      <label for="imageUrl" class="block text-gray-700 font-bold mb-2">URL de la Imagen</label>
+      <input type="text" id="imageUrl" [(ngModel)]="newProduct.imageUrl" name="imageUrl" required class="w-full border rounded-lg px-3 py-2">
+    </div>
+    <div class="mb-4">
+      <label for="discountPercentage" class="block text-gray-700 font-bold mb-2">Porcentaje de Descuento</label>
+      <input type="number" id="discountPercentage" [(ngModel)]="newProduct.discountPercentage" name="discountPercentage" required class="w-full border rounded-lg px-3 py-2">
+    </div>
+    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">
+      Crear Producto
+    </button>
+  </form>
+</div>
+
+<!-- Mostrar Productos -->
+<div class="container mx-auto px-4 py-16">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Nuestros Productos</h1>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <ng-container *ngFor="let product of products$ | async">
+      <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <!-- Vista normal (cuando no está en modo edición) -->
+        <div *ngIf="editProductId !== product.id">
+          <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h2 class="text-lg font-semibold text-gray-800">{{ product.name }}</h2>
+            <p class="text-gray-600 text-sm mb-2">{{ product.description }}</p>
+            <p class="text-blue-600 font-bold text-lg mb-4">$ {{ product.price }}</p>
+            <p class="text-gray-600 text-sm mb-2">Stock: {{ product.stock }}</p>
+            <p class="text-gray-600 text-sm mb-2">Disponible: {{ product.available ? 'Sí' : 'No' }}</p>
+            <p class="text-gray-600 text-sm mb-2">Descuento: {{ product.discountPercentage }}%</p>
+            <!-- Botones de acción -->
+            <button (click)="startEditProduct(product)" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg">
+              Editar Producto
+            </button>
+            <button (click)="deleteProduct(product.id)" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg mt-2">
+              Eliminar Producto
+            </button>
+          </div>
+        </div>
+        
+        <!-- Formulario de edición -->
+        <div *ngIf="editProductId === product.id" class="p-4">
+          <h3 class="text-lg font-semibold mb-4 text-gray-800">Editar Producto</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Nombre</label>
+              <input [(ngModel)]="editingProduct.name" class="w-full border rounded-lg px-3 py-2" required>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Descripción</label>
+              <textarea [(ngModel)]="editingProduct.description" class="w-full border rounded-lg px-3 py-2" rows="3" required></textarea>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Precio</label>
+              <input type="number" [(ngModel)]="editingProduct.price" class="w-full border rounded-lg px-3 py-2" required>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Stock</label>
+              <input type="number" [(ngModel)]="editingProduct.stock" class="w-full border rounded-lg px-3 py-2" required>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Disponible</label>
+              <select [(ngModel)]="editingProduct.available" class="w-full border rounded-lg px-3 py-2" required>
+                <option [ngValue]="true">Sí</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Categoría</label>
+              <select [(ngModel)]="editingProduct.categoryId" class="w-full border rounded-lg px-3 py-2" required>
+                <option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.name }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">URL de Imagen</label>
+              <input [(ngModel)]="editingProduct.imageUrl" class="w-full border rounded-lg px-3 py-2" required>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-bold mb-2">Porcentaje de Descuento</label>
+              <input type="number" [(ngModel)]="editingProduct.discountPercentage" class="w-full border rounded-lg px-3 py-2" required>
+            </div>
+            <div class="flex space-x-2">
+              <button (click)="updateProduct()" class="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded w-1/2">
+                Guardar
+              </button>
+              <button (click)="cancelEditProduct()" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-3 rounded w-1/2">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<!-- Mostrar Categorías -->
+<!-- Lista de categorías existentes -->
+<div class="mt-8 mb-6">
+  <h2 class="text-xl font-semibold mb-4">Categorías existentes</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div *ngFor="let category of categories$ | async" class="border p-4 rounded-lg">
+      <!-- Vista normal (cuando no está en modo edición) -->
+      <div *ngIf="editCategoryId !== category.id">
+        <h3 class="font-medium">{{ category.name }}</h3>
+        <p class="text-gray-600">{{ category.description }}</p>
+        <div class="mt-3 flex space-x-2">
+          <button (click)="startEditCategory(category)" 
+                  class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">
+            Editar
+          </button>
+          <button (click)="deleteCategory(category.id)" 
+                  class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded">
+            Eliminar
+          </button>
+        </div>
+      </div>
+      
+      <!-- Formulario de edición -->
+      <div *ngIf="editCategoryId === category.id" class="space-y-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Nombre</label>
+          <input [(ngModel)]="editingCategory.name" 
+                 class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" 
+                 required>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Descripción</label>
+          <textarea [(ngModel)]="editingCategory.description" 
+                    class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" 
+                    rows="3" required></textarea>
+        </div>
+        <div class="flex space-x-2">
+          <button (click)="updateCategory()" 
+                  class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded">
+            Guardar
+          </button>
+          <button (click)="cancelEditCategory()" 
+                  class="bg-gray-500 hover:bg-gray-600 text-white py-1 px-3 rounded">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Crear una nueva categoria -->
+<div class="mt-8 mb-6">
+  <h2 class="text-xl font-semibold mb-4">Crear Nueva Categoría</h2>
+  <form (ngSubmit)="createCategory()" #categoryForm="ngForm" class="bg-white shadow-md rounded-lg p-6">
+    <div class="mb-4">
+      <label for="name" class="block text-gray-700 font-bold mb-2">Nombre de la Categoría</label>
+      <input type="text" id="name" [(ngModel)]="newCategory.name" name="name" required class="w-full border rounded-lg px-3 py-2">
+    </div>
+    <div class="mb-4">
+      <label for="description" class="block text-gray-700 font-bold mb-2">Descripción</label>
+      <textarea id="description" [(ngModel)]="newCategory.description" name="description" required class="w-full border rounded-lg px-3 py-2" rows="3"></textarea>
+    </div>
+    <div class="flex space-x-2">
+      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-3 rounded">
+        Crear
+      </button>
+      <button (click)="cancelCreateCategory()" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-3 rounded">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>
