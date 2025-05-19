@@ -27,7 +27,7 @@
                     <div *ngFor="let item of cart$ | async; let last = last"
                         class="flex flex-col sm:flex-row items-center p-4" [ngClass]="{'border-b': !last}">
                         <!-- Imagen -->
-                        <img [src]="item.product.imgUrl" [alt]="item.product.name"
+                        <img [src]="item.product.imageUrl" [alt]="item.product.name"
                             class="w-24 h-24 object-cover rounded-md">
 
                         <!-- Detalles -->
