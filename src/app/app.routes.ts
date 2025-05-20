@@ -20,6 +20,7 @@ import { RoleGuard } from './core/guards/role.guard';
 
 import { canActivateAuthRole } from './core/guards/key-cloak.guard';
 import { DebtsComponent } from './features/debts/debts.component';
+import { SuccesComponent } from './features/payments/succes/succes.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,7 @@ export const routes: Routes = [
       { path: 'cart', component: CartComponent },
       { path: 'checkout', component: CheckoutComponent },
       { path: 'debts', component: DebtsComponent },
+      { path: 'succes', component: SuccesComponent },
       { path: 'profile', component: ProfileComponent, canActivate: [canActivateAuthRole], data: { role: 'user' } },
     ],
   },

@@ -11,7 +11,11 @@ export class UserKeyCloakService {
 
   private admin = new BehaviorSubject<boolean>(false)
   public admin$ = this.admin.asObservable()
+  private isLoggedIn = new BehaviorSubject<boolean>(false)
+  public isLoggedIn$ = this.isLoggedIn.asObservable()
   private apiUrl: string | null = null;
+  private tokenObservable = new BehaviorSubject<string | null>(null)
+  public token$ = this.tokenObservable.asObservable()
   private token: string | null = null;
   private userRole: String[] | null = null
 
@@ -20,8 +24,13 @@ export class UserKeyCloakService {
     //nos suscribimos al observable de token para obtener el token de acceso y sus futuras actualizaciones
     //cada vez que el token cambie, se actualizará la variable token  
     this.authService.token$.subscribe(token => {
+      this.tokenObservable.next(token)
       this.token = token;
     });
+
+    this.authService.isLoggedIn$.subscribe(logged => {
+      this.isLoggedIn.next(logged)
+    })
 
     this.authService.role.subscribe(roles => {
       this.userRole = roles

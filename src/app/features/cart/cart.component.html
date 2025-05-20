@@ -1,69 +1,153 @@
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Tu Carrito</h1>
+<div class="min-h-screen container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">Tu Carrito</h1>
 
-    <!-- Carrito Vacío -->
-    <ng-container *ngIf="cart$ | async as cart">
-        <div *ngIf="cart.length === 0" class="bg-white rounded-lg shadow-md p-8 text-center">
-            <img src="assets/empty-cart.svg" alt="Carrito vacío" class="w-40 h-40 mx-auto mb-4 animate-pulse">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-3">Tu carrito está vacío</h2>
-            <p class="text-gray-500 mb-6">Parece que aún no has añadido ningún producto a tu carrito.</p>
-            <a routerLink="/products-list"
-                class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300">
-                Ver productos
-            </a>
+  <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Cart Items Column - MANTENIDO EXACTAMENTE IGUAL AL ORIGINAL -->
+    <div class="w-full lg:w-2/3">
+      @for(item of orderItems; track item.id){
+      <div
+        class="flex flex-col sm:flex-row items-center border border-gray-200 rounded-lg p-4 mb-2 shadow-sm hover:shadow-md transition-shadow bg-gray-50">
+        <div class="flex-shrink-0 w-20 h-20 bg-gray-100 rounded-md overflow-hidden">
+          <img src="{{item.productImg}}" alt="{{item.productName}}" class="w-full h-full object-cover" />
         </div>
 
-        <!-- Carrito con Productos -->
-        <div *ngIf="cart.length > 0" class="flex flex-col lg:flex-row gap-8">
-            <!-- Lista de Productos -->
-            <div class="lg:w-2/3">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <!-- Encabezado -->
-                    <div class="bg-gray-50 p-4 border-b">
-                        <h2 class="text-lg font-semibold text-gray-700">Productos ({{cart.length}})</h2>
-                    </div>
+        <div class="flex-grow sm:ml-6 mt-4 sm:mt-0 grid grid-cols-3 w-full gap wniosek-x-2">
+          <div class="col-span-3 sm:col-span-1">
+            <p class="text-sm font-medium text-gray-500 mb-0.5">Producto</p>
+            <h2 class="text-lg font-semibold text-gray-800">{{item.productName}}</h2>
+          </div>
 
-                    <!-- Productos -->
-                    <div *ngFor="let item of cart$ | async; let last = last"
-                        class="flex flex-col sm:flex-row items-center p-4" [ngClass]="{'border-b': !last}">
-                        <!-- Imagen -->
-                        <img [src]="item.product.imageUrl" [alt]="item.product.name"
-                            class="w-24 h-24 object-cover rounded-md">
-
-                        <!-- Detalles -->
-                        <div class="sm:ml-6 flex-grow">
-                            <h3 class="text-lg font-semibold text-gray-800">{{item.product.name}}</h3>
-                            <p class="text-sm text-gray-500 mb-2">{{item.product.description | slice:0:100}}...</p>
-                            <p class="text-blue-600 font-bold">${{item.product.price}}</p>
-                        </div>
-
-                        <!-- Controles de Cantidad -->
-                        <div class="flex items-center mt-4 sm:mt-0">
-                            <button (click)="decreaseQuantity(item)"
-                                class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
-                                <span class="text-gray-600 text-xl">−</span>
-                            </button>
-                            <span class="mx-4 text-gray-700 w-6 text-center">{{item.quantity}}</span>
-                            <button (click)="increaseQuantity(item)"
-                                class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
-                                <span class="text-gray-600 text-xl">+</span>
-                            </button>
-                        </div>
-
-                        <!-- Botón Eliminar -->
-                        <button (click)="removeFromCart(item)"
-                            class="mt-4 sm:mt-0 sm:ml-6 text-red-500 hover:text-red-700 transition-colors">
-                            <span class="material-symbols-outlined">delete</span>
-                        </button>
-                    </div>
-                </div>
+          <div class="col-span-3 sm:col-span-1 mt-2 sm:mt-0 text-center">
+            <p class="text-sm font-medium text-gray-500 mb-0.5">Cantidad</p>
+            <div class="inline-flex items-center bg-gray-200 rounded-md px-2 py-1">
+              <input type="number" [(ngModel)]="item.quantity" (ngModelChange)="onQuantityChange(item)"
+                class="w-16 text-gray-800 font-medium text-center bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                min="1" step="1" />
             </div>
+          </div>
+
+          <div class="col-span-3 sm:col-span-1 mt-2 sm:mt-0 text-right">
+            <p class="text-sm font-medium text-gray-500 mb-0.5">Precio</p>
+            <span class="text-lg font-bold text-gray-800">${{item.price}}</span>
+          </div>
         </div>
 
-    </ng-container>
+        <div class="flex space-x-4 mt-4 sm:mt-0 sm:ml-8">
+          @if (isQuantityModified(item.id)) {
+          <button (click)="saveQuantity(item)"
+            class="p-3 rounded-full bg-green-100 hover:bg-green-200 text-green-600 transition-colors">
+            <!-- Icono de guardar -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+          </button>
+          }
+          <button (click)="deleteItem(item)"
+            class="p-3 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition-colors">
+            <!-- Icono de eliminar -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+      } @empty {
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center shadow-sm">
+        <div class="flex justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+        <h2 class="text-xl font-semibold mb-2">No hay artículos.</h2>
+        <p class="text-gray-500 mb-6">Parece que aún no has añadido productos a tu carrito</p>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-md font-medium transition-colors">
+          Continuar comprando
+        </button>
+      </div>
+      }
+    </div>
 
-            <!-- Resumen de Compra -->
-            <!-- <div class="lg:w-1/3">
+    <!-- Order Summary Column - MEJORADO CON ESTILOS PROFESIONALES EN AZUL -->
+    <div class="w-full lg:w-1/3 mt-8 lg:mt-0">
+      @if(order && orderItems?.length){
+      <div class="bg-white border border-blue-100 rounded-lg shadow-lg p-6 sticky top-4">
+        <h2 class="text-xl font-bold text-blue-800 mb-5 pb-4 border-b border-blue-100 flex items-center">
+          Resumen de la Orden
+          <span class="ml-2 bg-blue-100 text-blue-600 text-xs py-1 px-2 rounded-full">{{order.totalItems}} items</span>
+        </h2>
+        
+        <div class="space-y-4 mb-6">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Fecha:
+            </span>
+            <span class="font-medium text-gray-800">{{order.createdAt}}</span>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              Cantidad de artículos:
+            </span>
+            <span class="font-medium text-gray-800">{{order.totalItems}}</span>
+          </div>
+          
+          <div class="flex justify-between items-center pt-4 mt-2 border-t border-blue-100">
+            <span class="text-lg font-semibold text-blue-800 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Total:
+            </span>
+            <span class="text-2xl font-bold text-blue-700">${{order.total_amount}}</span>
+          </div>
+        </div>
+        
+        <button
+        (click)="payOrder()"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          Pagar
+        </button>
+        
+        <div class="mt-4 pt-4 border-t border-blue-100">
+          <div class="flex items-center justify-center space-x-3 mb-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Visa" class="h-6 w-auto opacity-70" />
+            <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="MasterCard" class="h-6 w-auto opacity-70" />
+            <img src="https://cdn-icons-png.flaticon.com/512/196/196565.png" alt="PayPal" class="h-6 w-auto opacity-70" />
+          </div>
+          <p class="text-center text-sm text-gray-500 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Pago seguro y procesado al instante
+          </p>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+<!-- Resumen de Compra -->
+<!-- <div class="lg:w-1/3">
                 <div class="bg-white rounded-lg shadow-md p-6 sticky top-20">
                     <h2 class="text-lg font-semibold text-gray-700 mb-4">Resumen de Compra</h2>
 
@@ -99,4 +183,3 @@
                     </p>
                 </div>
             </div> -->
-</div>

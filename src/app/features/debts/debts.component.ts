@@ -77,9 +77,7 @@ export class DebtsComponent implements OnInit {
       const amount = formValues.amount;
 
       const payload:DebtDto = {user_id: selectedUser, description: 'ejemplo de deuda', amount:amount, status: selectedStatus } 
-
       const result = await this.debtsService.createNewDebt(payload)
-
     } else {
       console.log('Formulario inválido');
     }
