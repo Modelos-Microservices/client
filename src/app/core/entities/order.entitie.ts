@@ -40,3 +40,10 @@ export type  DeleteOrderItemDto = {
 }
 
 
+
+export type CreateOrderItemDto = {
+    productId: number;
+    quantity: number;
+}
+
+

@@ -3,7 +3,7 @@ import { UserKeyCloakService } from './user-key-cloak.service';
 import { AuthService } from './auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { DeleteOrderItemDto, UpdateOrderItemDto } from '../entities/order.entitie';
+import { CreateOrderItemDto, DeleteOrderItemDto, UpdateOrderItemDto } from '../entities/order.entitie';
 
 @Injectable({
   providedIn: 'root'
@@ -111,6 +111,27 @@ export class CartService {
 
       const response = await firstValueFrom(
         this.http.post<any>(`${this.apiUrl}/pay`, {}, { headers })
+      )
+      return response;
+    } catch (error) {
+      throw error
+    }
+
+  }
+
+
+    async addOrderItem(createOrderItemDto: CreateOrderItemDto) {
+    const token = await firstValueFrom(this.authService.token$);
+
+    if (!token) throw new Error('No token provided')
+    try {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+      })
+
+      console.log(createOrderItemDto)
+      const response = await firstValueFrom(
+        this.http.post<any>(`${this.apiUrl}/add`, {...createOrderItemDto}, { headers })
       )
       return response;
     } catch (error) {
