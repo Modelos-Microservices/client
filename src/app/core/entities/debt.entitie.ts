@@ -9,3 +9,9 @@ export interface Debt {
   createdAt: string; 
   status: DebtStatus
 }
+
+export interface UpdateDebtDto {
+  id: string
+  status: DebtStatus
+}
+

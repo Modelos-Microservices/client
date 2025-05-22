@@ -1,87 +1,222 @@
-<div class="min-h-screen bg-gray-50 flex items-center justify-center">
-  <div class="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
-    <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Crear Nueva Deuda</h2>
-    @defer(when formReady){
-      <form [formGroup]="myform" (ngSubmit)="onSubmit()" class="space-y-6">
-    <div class="space-y-2">
-      <label for="users" class="block text-sm font-medium text-gray-700">Usuarios:</label>
-      <select 
-        id="users" 
-        formControlName="users"
-        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm"
-      >
-        <option value="">-- Selecciona un Usuario --</option>
-        @for (user of users; track user.id) { 
-          <option [value]="user.id">{{ user.username }}</option>
-        }
-        @empty {
-          <option value="" disabled>No hay usuarios disponibles</option>
-        }
-      </select>
-      @if (myform.get('users')?.invalid && myform.get('users')?.touched) {
-        <p class="mt-2 text-sm text-red-600">Por favor selecciona un usuario.</p>
-      }
-    </div>
-
-    <div class="space-y-2">
-      <label for="status" class="block text-sm font-medium text-gray-700">Estado:</label>
-      <select 
-        id="status" 
-        formControlName="status"
-        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm"
-      >
-        <option value="">-- Selecciona un Estado --</option>
-        @for (state of status; track state.value) { 
-          <option [value]="state.value">{{ state.viewValue }}</option>
-        }
-        @empty {
-          <option value="" disabled>No hay estados disponibles</option>
-        }
-      </select>
-      @if (myform.get('status')?.invalid && myform.get('status')?.touched) {
-        <p class="mt-2 text-sm text-red-600">Por favor selecciona un estado.</p>
-      }
-    </div>
-
-    <div class="space-y-2">
-      <label for="amount" class="block text-sm font-medium text-gray-700">Cantidad:</label>
-      <div class="mt-1 relative rounded-md shadow-sm">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <span class="text-gray-500 sm:text-sm">$</span>
-        </div>
-        <input 
-          id="amount" 
-          type="text" 
-          formControlName="amount"
-          class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md py-2"
-          placeholder="0.00"
-        >
-      </div>
-      @if (myform.get('amount')?.invalid && myform.get('amount')?.touched) {
-        <p class="mt-2 text-sm text-red-600">La cantidad es requerida.</p>
-      }
-    </div>
-
-    <div class="pt-4">
-      <button 
-        type="submit" 
-        [disabled]="!myform.valid"
-        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Enviar
-      </button>
-    </div>
-  </form>
-    }
+@if(admin){
+ <div class="flex justify-center my-20"> 
+    <button (click)="toggleCreateDebtModal(true)" type="button" class="group relative px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-lg shadow-md hover:from-teal-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-75 transition-all duration-300 overflow-hidden">
+      <span class="relative z-10 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 transform group-hover:rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        Crear Nueva Deuda
+      </span>
+      <span class="absolute bottom-0 left-0 h-1 bg-white/30 w-0 group-hover:w-full transition-all duration-300"></span>
+    </button>
   </div>
-</div>
+}
+@if(showCreateDebtModal && admin){
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4" (click)="toggleCreateDebtModal(false)">
+    <div class="fixed inset-0 bg-gray-600 bg-opacity-50 backdrop-blur-sm transition-opacity"></div> 
+    <div class="relative bg-white w-full max-w-lg p-6 rounded-xl shadow-[0_10px_40px_-5px_rgba(0,0,0,0.2)] border border-gray-100 transform transition-all" (click)="$event.stopPropagation()">
+      
+      <div class="flex justify-between items-center pb-3 border-b border-gray-200">
+        <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+          <span class="inline-block w-1 h-6 bg-teal-500 rounded-full mr-2"></span>
+          Crear Nueva Deuda
+        </h3>
+        <button (click)="toggleCreateDebtModal(false)" type="button" class="text-gray-500 bg-transparent hover:bg-gray-100 hover:text-gray-900 rounded-full text-sm p-2 ml-auto inline-flex items-center transition-colors duration-200">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          <span class="sr-only">Cerrar modal</span>
+        </button>
+      </div>
 
+      @if(formReady && myform){
+        <form [formGroup]="myform" (ngSubmit)="onSubmit()" class="mt-4 space-y-4">
+          <div>
+            <label for="users" class=" text-sm font-medium text-gray-700 mb-1 flex items-center">
+              <span class="text-teal-600 mr-1">•</span> Usuario
+            </label>
+            <select id="users" formControlName="users" class="mt-1 block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition-all duration-200 sm:text-sm">
+              <option value="" disabled>Seleccione un usuario</option>
+              @for(user of users; track user.id){
+                <option [value]="user.id">{{ user.username }}</option>
+              }
+            </select>
+            @if(myform.get('users')?.invalid && (myform.get('users')?.touched || myform.get('users')?.dirty)){
+              <p class="text-rose-600 text-xs mt-1 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                El usuario es requerido.
+              </p>
+            }
+          </div>
+
+          <div>
+            <label for="description" class=" text-sm font-medium text-gray-700 mb-1 flex items-center">
+              <span class="text-teal-600 mr-1">•</span> Descripción
+            </label>
+            <input type="text" id="description" formControlName="description" class="mt-1 block w-full py-2.5 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition-all duration-200 sm:text-sm" placeholder="Ej: Cuota mensual">
+            @if(myform.get('description')?.invalid && (myform.get('description')?.touched || myform.get('description')?.dirty)){
+              <p class="text-rose-600 text-xs mt-1 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                La descripción es requerida.
+              </p>
+            }
+          </div>
+
+          <div>
+            <label for="amount" class=" text-sm font-medium text-gray-700 mb-1 flex items-center">
+              <span class="text-teal-600 mr-1">•</span> Monto
+            </label>
+            <input type="number" id="amount" formControlName="amount" class="mt-1 block w-full py-2.5 px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition-all duration-200 sm:text-sm" placeholder="1000">
+            @if(myform.get('amount')?.invalid && (myform.get('amount')?.touched || myform.get('amount')?.dirty)){
+              @if(myform.get('amount')?.hasError('required')){
+                <p class="text-rose-600 text-xs mt-1 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                  El monto es requerido.
+                </p>
+              }
+              @if(myform.get('amount')?.hasError('min')){
+                <p class="text-rose-600 text-xs mt-1 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                  El monto mínimo es 1000.
+                </p>
+              }
+            }
+          </div>
+
+          <div>
+            <label for="status" class=" text-sm font-medium text-gray-700 mb-1 flex items-center">
+              <span class="text-teal-600 mr-1">•</span> Estado
+            </label>
+            <select id="status" formControlName="status" class="mt-1 block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition-all duration-200 sm:text-sm">
+              <option value="" disabled>Seleccione un estado</option>
+              @for(s of status; track s.value){
+                <option [value]="s.value">{{ s.viewValue }}</option>
+              }
+            </select>
+            @if(myform.get('status')?.invalid && (myform.get('status')?.touched || myform.get('status')?.dirty)){
+              <p class="text-rose-600 text-xs mt-1 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                El estado es requerido.
+              </p>
+            }
+          </div>
+          
+          <div class="pt-4 flex justify-end space-x-3 border-t border-gray-200 mt-6">
+            <button type="button" (click)="toggleCreateDebtModal(false)" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200">
+              Cancelar
+            </button>
+            <button type="submit" [disabled]="myform.invalid" class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-teal-500 to-teal-600 rounded-lg hover:from-teal-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm">
+              Guardar Deuda
+            </button>
+          </div>
+        </form>
+        } @else if(admin && !formReady) {
+        <div class="text-center py-8">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-teal-500"></div>
+          <p class="text-gray-600 mt-2">Cargando datos del formulario...</p>
+        </div>
+      }
+    </div>
+  </div>
+}
 
 @if(readyDebts){
-  <!--Tabla de deudas-->
+<div class="flex flex-wrap justify-center gap-4 my-6">
+  <button
+    (click)="filterBy('PAID')"
+    type="button"
+    [ngClass]="{
+      'bg-green-50': paidFilter 
+    }" 
+    class="group flex items-center px-4 py-2.5 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-all duration-200"
+  >
+    <span
+      [ngClass]="{ 'bg-green-200': paidFilter }"
+      class="flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full mr-2 group-hover:bg-green-200 transition-colors duration-200"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+    </span>
+    <span
+      [ngClass]="{ 'text-green-700': paidFilter }"
+      class="font-medium text-gray-700 group-hover:text-green-700 transition-colors duration-200"
+      >Pagado</span
+    >
+    <span
+      [ngClass]="{ 'bg-green-200': paidFilter }"
+      class="ml-2 bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full group-hover:bg-green-200 transition-colors duration-200"
+      >{{ paidCount }}</span
+    >
+  </button>
 
-<div class="overflow-x-auto bg-white shadow-md rounded-lg">
-  <table class="min-w-full divide-y divide-gray-200">
+  <button
+    (click)="filterBy('EXPIRED')"
+    type="button"
+    [ngClass]="{
+      'bg-rose-50': expiredFilter 
+    }"
+    class="group flex items-center px-4 py-2.5 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-500 transition-all duration-200"
+  >
+    <span
+      [ngClass]="{ 'bg-rose-200': expiredFilter }"
+      class="flex items-center justify-center w-6 h-6 bg-rose-100 text-rose-600 rounded-full mr-2 group-hover:bg-rose-200 transition-colors duration-200"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </span>
+    <span
+      [ngClass]="{ 'text-rose-700': expiredFilter }"
+      class="font-medium text-gray-700 group-hover:text-rose-700 transition-colors duration-200"
+      >Vencido</span
+    >
+    <span
+      [ngClass]="{ 'bg-rose-200': expiredFilter }"
+      class="ml-2 bg-rose-100 text-rose-800 text-xs font-medium px-2 py-0.5 rounded-full group-hover:bg-rose-200 transition-colors duration-200"
+      >{{ expiredCount }}</span
+    >
+  </button>
+
+  <button
+    (click)="filterBy('PENDING')"
+    type="button"
+    [ngClass]="{
+      'bg-amber-50': pendingFilter 
+    }"
+    class="group flex items-center px-4 py-2.5 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 transition-all duration-200"
+  >
+    <span
+      [ngClass]="{ 'bg-amber-200': pendingFilter }"
+      class="flex items-center justify-center w-6 h-6 bg-amber-100 text-amber-600 rounded-full mr-2 group-hover:bg-amber-200 transition-colors duration-200"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </span>
+    <span
+      [ngClass]="{ 'text-amber-700': pendingFilter }"
+      class="font-medium text-gray-700 group-hover:text-amber-700 transition-colors duration-200"
+      >Pendiente</span
+    >
+    <span
+      [ngClass]="{ 'bg-amber-200': pendingFilter }"
+      class="ml-2 bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded-full group-hover:bg-amber-200 transition-colors duration-200"
+      >{{ pendingCount }}</span
+    >
+  </button>
+</div>
+
+<div class="mx-auto max-w-4xl overflow-x-auto bg-white shadow-md rounded-lg my-8 mb-24">
+    <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
       <tr>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -99,47 +234,64 @@
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           Estado
         </th>
+        @if (hasPendingDebts) {
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Acciones
+        </th>
+        }
       </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
       @for (debt of debts; track debt.id; let i = $index) {
-        <tr [ngClass]="i % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm font-medium text-gray-900">
-              {{ debt.user_name || 'Sin nombre' }}
-            </div>
-            <div class="text-xs text-gray-500">
-              ID: {{ debt.user_id | slice:0:8 }}...
-            </div>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ debt.description }}</div>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ debt.amount | currency:'USD':'symbol':'1.2-2' }}</div>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">{{ debt.createdAt | date:'dd/MM/yyyy' }}</div>
-            <div class="text-xs text-gray-500">{{ debt.createdAt | date:'HH:mm' }}</div>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <span
-              [ngClass]="{
-                'px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full': true,
-                'bg-green-100 text-green-800': debt.status === 'PAID',
-                'bg-red-100 text-red-800': debt.status === 'EXPIRED'
-              }">
-              {{ debt.status === 'PAID' ? 'Pagado' : 'Vencido' }}
-            </span>
-          </td>
-        </tr>
+      <tr [ngClass]="i % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm font-medium text-gray-900">
+            {{ debt.user_name }} </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm text-gray-900">{{ debt.description }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm text-gray-900">{{ debt.amount | currency:'USD':'symbol':'1.2-2' }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm text-gray-900">{{ debt.createdAt | date:'dd/MM/yyyy' }}</div>
+          <div class="text-xs text-gray-500">{{ debt.createdAt | date:'HH:mm' }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <span [ngClass]="{
+                  'px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full': true,
+                  'bg-green-100 text-green-800': debt.status === 'PAID',
+                  'bg-red-100 text-red-800': debt.status === 'EXPIRED',
+                  'bg-yellow-100 text-yellow-800': debt.status === 'PENDING'
+                }">
+            {{ debt.status === 'PAID' ? 'Pagado' : (debt.status === 'EXPIRED' ? 'Vencido' : (debt.status === 'PENDING' ?
+            'Pendiente' : debt.status)) }}
+          </span>
+        </td>
+        @if (hasPendingDebts) {
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+          @if (debt.status === 'PENDING') {
+          <button (click)="pagarDeuda(debt.id)"
+            class="px-4 py-2 font-medium text-white bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm transition duration-200 ease-in-out flex items-center justify-center space-x-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v2" />
+            </svg>
+            <span>Pagar</span>
+          </button>
+          }
+        </td>
+        }
+      </tr>
       }
       @empty {
-        <tr>
-          <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-            No hay datos disponibles
-          </td>
-        </tr>
+      <tr>
+        <td [attr.colspan]="hasPendingDebts ? 6 : 5" class="px-6 py-4 text-center text-sm text-gray-500">
+          No hay datos disponibles
+        </td>
+      </tr>
       }
     </tbody>
   </table>
