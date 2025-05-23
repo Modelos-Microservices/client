@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { Subscription } from 'rxjs';
 
@@ -7,13 +7,14 @@ import { Subscription } from 'rxjs';
   selector: 'app-header',
   imports: [ CommonModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
-})
-// ...existing code...
+  styleUrl: './header.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]})
 
 export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   private authSubscription!: Subscription;
+
+  showMobileMenu: boolean = false;
 
   constructor(private authService: AuthService) { }
 

@@ -1,58 +1,75 @@
 <!-- navbar -->
+
 <head>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=favorite" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=favorite" />
 </head>
 
 <header class="fixed top-0 z-50 mx-auto flex h-15 w-full select-none items-center text-white">
     <nav class="w-full">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-            <!-- Logo / Inicio -->
-            <div class="flex-shrink-0">
-                <a href="/" class="text-xl font-bold text-gray-800 hover:text-gray-600">
-                    Tienda Del Diego
-                </a>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo / Inicio -->
+                <div class="flex-shrink-0">
+                    <a href="/" class="text-xl font-bold hover:text-orange-700">
+                        Tienda Del Diego
+                    </a>
+                </div>
+
+
+
+                <!-- Menu Items (desktop) -->
+                <div class="navbare hidden md:flex space-x-8">
+                    <a href="/home" class=" hover:text-orange-700 font-medium">Inicio</a>
+                    <a href="/products-list" class=" hover:text-orange-700 font-medium">Productos</a>
+                    <a href="/products-create" class=" hover:text-orange-700 font-medium">Crear Producto</a>
+                    <a *ngIf="!isLoggedIn" href="/login" class=" hover:text-orange-700 font-medium">Iniciar
+                        Sesión</a>
+                    <a (click)="logout(); $event.preventDefault()" *ngIf="isLoggedIn" href="/logout"
+                        class=" hover:text-orange-700 font-medium">Cerrar Sesión</a>
+                </div>
+
+                <!-- Icons -->
+                <div class="flex items-center space-x-8">
+                    <a href="/favorites" class="hover:text-orange-700">
+                        <ion-icon name="bookmarks-outline" class="text-xl"></ion-icon>
+                    </a>
+                    <a href="/cart" class="hover:text-orange-700">
+                        <ion-icon name="cart-outline" class="text-2xl"></ion-icon>
+                    </a>
+                    <a href="/profile" class="hover:text-orange-700">
+                        <ion-icon name="person-circle-outline" class="text-2xl"></ion-icon>
+                    </a>
+                </div>
+                <!-- Botón hamburguesa solo en móvil -->
+                <div class="md:hidden">
+                    <button (click)="showMobileMenu = !showMobileMenu" class="hover:text-orange-700 cursor-pointer text-2xl">
+                        <ion-icon name="reorder-four-outline"></ion-icon>
+                    </button>
+                </div>
             </div>
 
-            <!-- Menu Items -->
-            <div class="hidden md:flex space-x-8">
-                <a href="/home" class="text-gray-600 hover:text-gray-800 font-medium">
-                    Inicio
-                </a>
-                <a href="/products-list" class="text-gray-600 hover:text-gray-800 font-medium">
-                    Productos
-                </a>
-                <a href="/products-create" class="text-gray-600 hover:text-gray-800 font-medium">
-                    Crear Producto
-                </a>
-                <a *ngIf="!isLoggedIn" href="/login" class="text-gray-600 hover:text-gray-800 font-medium">
-                    Iniciar Sesión
-                </a>
-                <a (click)="logout(); $event.preventDefault()" *ngIf="isLoggedIn" href="/logout" class="text-gray-600 hover:text-gray-800 font-medium">
-  Cerrar Sesión
-</a>
-            </div>
 
-            <!-- Icons -->
-            <div class="flex items-center space-x-4">
-                <!-- Favoritos -->
-                <a href="/favorites" class="text-gray-600 hover:text-gray-800">
-                    <span class="material-symbols-outlined">
-                        favorite
-                        </span>
-                </a>
-
-                <!-- Carrito -->
-                <a href="/cart" class="text-gray-600 hover:text-gray-800">
-                    <img width="24" height="24" src="https://img.icons8.com/windows/32/shopping-cart.png" alt="shopping-cart"/>
-                </a>
-
-                <!-- Perfil -->
-                <a href="/profile" class="text-gray-600 hover:text-gray-800">
-                    <img width="24" height="24" src="https://img.icons8.com/fluency-systems-regular/48/administrator-male.png" alt="administrator-male"/>
-                </a>
+            <!-- Menú móvil desplegable -->
+            <div *ngIf="showMobileMenu" class="md:hidden bg-white shadow-lg rounded-lg mt-10 px-4 py-4 space-y-2 relative
+         transition-all duration-300 ease-in-out
+         animate-fade-in">
+                <!-- Botón cerrar -->
+                <button (click)="showMobileMenu = false"
+                    class="absolute top-2 right-2 cursor-pointer hover:text-orange-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <a href="/home" class="block  hover:text-orange-700 font-medium mt-6">Inicio</a>
+                <a href="/products-list" class="block  hover:text-orange-700 font-medium">Productos</a>
+                <a href="/products-create" class="block  hover:text-orange-700 font-medium">Crear
+                    Producto</a>
+                <a *ngIf="!isLoggedIn" href="/login" class="block  hover:text-orange-700 font-medium">Iniciar
+                    Sesión</a>
+                <a (click)="logout(); $event.preventDefault()" *ngIf="isLoggedIn" href="/logout"
+                    class="block  hover:text-orange-700 font-medium">Cerrar Sesión</a>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 </header>
