@@ -1,173 +1,286 @@
 <!-- crear nuevo producto -->
-<div class="container mx-auto px-4 py-16">
-  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Crear Nuevo Producto</h1>
-  <form (ngSubmit)="createProduct()" #productForm="ngForm" class="bg-white shadow-md rounded-lg p-6">
-    <div class="mb-4">
-      <label for="name" class="block text-gray-700 font-bold mb-2">Nombre del Producto</label>
-      <input type="text" id="name" [(ngModel)]="newProduct.name" name="name" required class="w-full border rounded-lg px-3 py-2">
+<p-toast />
+
+<!-- crear nuevo producto -->
+<div
+  class="mt-24 flex justify-center items-center min-h-[60vh] bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-3xl shadow-2xl transition-all duration-500">
+  <form (ngSubmit)="createProduct()" #productForm="ngForm"
+    class="relative w-full max-w-lg bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-10 border border-purple-200 animate-fade-in">
+    <div
+      class="absolute -top-8 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full p-2 shadow-lg">
+      <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M12 4v16m8-8H4"></path>
+      </svg>
     </div>
-    <div class="mb-4">
-      <label for="description" class="block text-gray-700 font-bold mb-2">Descripción</label>
-      <textarea id="description" [(ngModel)]="newProduct.description" name="description" required class="w-full border rounded-lg px-3 py-2"></textarea>
+    <h1
+      class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 mb-8 text-center tracking-wide drop-shadow-lg">
+      Crear Nuevo Producto
+    </h1>
+    <div class="grid grid-cols-1 gap-6">
+      <div class="group relative">
+        <input type="text" id="name" [(ngModel)]="newProduct.name" name="name" required
+          class="peer w-full border-0 border-b-2 border-purple-300 bg-transparent px-0 py-2 focus:border-pink-400 focus:outline-none transition-all duration-300 placeholder-transparent"
+          placeholder="Nombre del Producto" />
+        <label for="name"
+          class="absolute left-0 top-2 text-gray-500 text-sm transition-all duration-300
+      peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400
+      peer-focus:-top-5 peer-focus:text-xs peer-focus:text-pink-500
+      peer-[:not(:placeholder-shown)]:-top-5 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-pink-500">
+          Nombre del Producto
+        </label>
+      </div>
+      <div class="group relative">
+        <textarea id="description" [(ngModel)]="newProduct.description" name="description" required
+          class="peer w-full border-0 border-b-2 border-purple-300 bg-transparent px-0 py-2 focus:border-pink-400 focus:outline-none transition-all duration-300 resize-none placeholder-transparent"
+          placeholder="Descripción"></textarea>
+        <label for="description"
+          class="absolute left-0 top-2 text-gray-500 text-sm transition-all duration-300
+      peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400
+      peer-focus:-top-5 peer-focus:text-xs peer-focus:text-pink-500
+      peer-[:not(:placeholder-shown)]:-top-5 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-pink-500">
+          Descripción
+        </label>
+      </div>
+      <div class="flex gap-4">
+        <!-- Precio -->
+        <div class="relative w-1/2">
+          <label for="price" class="block mb-1 text-xs font-semibold text-pink-500 transition-all duration-300">
+            Precio
+          </label>
+          <input type="number" id="price" [(ngModel)]="newProduct.price" name="price" required
+            class="w-full border-0 border-b-2 border-purple-300 bg-transparent px-0 py-2 focus:border-pink-400 focus:outline-none transition-all duration-300"
+            placeholder=" " />
+        </div>
+        <!-- Stock -->
+        <div class="relative w-1/2">
+          <label for="stock" class="block mb-1 text-xs font-semibold text-pink-500 transition-all duration-300">
+            Stock
+          </label>
+          <input type="number" id="stock" [(ngModel)]="newProduct.stock" name="stock" required
+            class="w-full border-0 border-b-2 border-purple-300 bg-transparent px-0 py-2 focus:border-pink-400 focus:outline-none transition-all duration-300"
+            placeholder=" " />
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <!-- Disponible -->
+        <div class="relative w-1/2">
+          <label for="available" class="block mb-1 text-xs font-semibold text-pink-500 transition-all duration-300">
+            Disponible
+          </label>
+          <select id="available" [(ngModel)]="newProduct.available" name="available" required
+            class="w-full border-0 border-b-2 border-purple-300 bg-transparent px-0 py-2 focus:border-pink-400 focus:outline-none transition-all duration-300">
+            <option [ngValue]="true">Sí</option>
+            <option [ngValue]="false">No</option>
+          </select>
+        </div>
+        <div class="group relative w-1/2">
+          <label for="categoryId" class="block mb-1 text-xs font-semibold text-pink-500 transition-all duration-300">
+            Categoría
+          </label>
+          <select id="categoryId" [(ngModel)]="newProduct.categoryId" name="categoryId" required
+            class="w-full border-0 border-b-2 border-purple-300 bg-transparent px-0 py-2 focus:border-pink-400 focus:outline-none transition-all duration-300">
+            <option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.name }}</option>
+          </select>
+        </div>
+        <!-- ...código existente... -->
+      </div>
+      <div class="group relative">
+        <input type="text" id="imageUrl" [(ngModel)]="newProduct.imageUrl" name="imageUrl" required
+          class="peer w-full border-0 border-b-2 border-purple-300 bg-transparent px-0 py-2 focus:border-pink-400 focus:outline-none transition-all duration-300 placeholder-transparent"
+          placeholder="URL de la Imagen" />
+        <label for="imageUrl"
+          class="absolute left-0 top-2 text-gray-500 text-sm transition-all duration-300
+      peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400
+      peer-focus:-top-5 peer-focus:text-xs peer-focus:text-pink-500
+      peer-[:not(:placeholder-shown)]:-top-5 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-pink-500">
+          URL de la Imagen
+        </label>
+      </div>
+      <!-- Porcentaje de Descuento -->
+      <div class="relative">
+        <label for="discountPercentage"
+          class="block mb-1 text-xs font-semibold text-pink-500 transition-all duration-300">
+          Porcentaje de Descuento
+        </label>
+        <input type="number" id="discountPercentage" [(ngModel)]="newProduct.discountPercentage"
+          name="discountPercentage" required
+          class="w-full border-0 border-b-2 border-purple-300 bg-transparent px-0 py-2 focus:border-pink-400 focus:outline-none transition-all duration-300"
+          placeholder=" " />
+      </div>
+      <button type="submit"
+        class="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-white font-bold text-lg shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 active:scale-95">
+        Crear Producto
+      </button>
+      <p-button (onClick)="showCreateProductSuccess()" label="Show" />
+
     </div>
-    <div class="mb-4">
-      <label for="price" class="block text-gray-700 font-bold mb-2">Precio</label>
-      <input type="number" id="price" [(ngModel)]="newProduct.price" name="price" required class="w-full border rounded-lg px-3 py-2">
-    </div>
-    <div class="mb-4">
-      <label for="stock" class="block text-gray-700 font-bold mb-2">Stock</label>
-      <input type="number" id="stock" [(ngModel)]="newProduct.stock" name="stock" required class="w-full border rounded-lg px-3 py-2">
-    </div>
-    <div class="mb-4">
-      <label for="available" class="block text-gray-700 font-bold mb-2">Disponible</label>
-      <select id="available" [(ngModel)]="newProduct.available" name="available" required class="w-full border rounded-lg px-3 py-2">
-        <option [ngValue]="true">Sí</option>
-        <option [ngValue]="false">No</option>
-      </select>
-    </div>
-    <div class="mb-4">
-      <label for="categoryId" class="block text-gray-700 font-bold mb-2">ID de Categoría</label>
-      <input type="text" id="categoryId" [(ngModel)]="newProduct.categoryId" name="categoryId" required class="w-full border rounded-lg px-3 py-2">
-    </div>
-    <div class="mb-4">
-      <label for="imageUrl" class="block text-gray-700 font-bold mb-2">URL de la Imagen</label>
-      <input type="text" id="imageUrl" [(ngModel)]="newProduct.imageUrl" name="imageUrl" required class="w-full border rounded-lg px-3 py-2">
-    </div>
-    <div class="mb-4">
-      <label for="discountPercentage" class="block text-gray-700 font-bold mb-2">Porcentaje de Descuento</label>
-      <input type="number" id="discountPercentage" [(ngModel)]="newProduct.discountPercentage" name="discountPercentage" required class="w-full border rounded-lg px-3 py-2">
-    </div>
-    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">
-      Crear Producto
-    </button>
   </form>
 </div>
 
 <!-- Mostrar Productos -->
 <div class="container mx-auto px-4 py-16">
-  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Nuestros Productos</h1>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  <h1
+    class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 mb-10 text-center tracking-wide drop-shadow-lg">
+    Nuestros Productos
+  </h1>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
     <ng-container *ngFor="let product of products$ | async">
-      <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-        <!-- Vista normal (cuando no está en modo edición) -->
-        <div *ngIf="editProductId !== product.id">
-          <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-48 object-cover">
-          <div class="p-4">
-            <h2 class="text-lg font-semibold text-gray-800">{{ product.name }}</h2>
-            <p class="text-gray-600 text-sm mb-2">{{ product.description }}</p>
-            <p class="text-blue-600 font-bold text-lg mb-4">$ {{ product.price }}</p>
-            <p class="text-gray-600 text-sm mb-2">Stock: {{ product.stock }}</p>
-            <p class="text-gray-600 text-sm mb-2">Disponible: {{ product.available ? 'Sí' : 'No' }}</p>
-            <p class="text-gray-600 text-sm mb-2">Descuento: {{ product.discountPercentage }}%</p>
-            <!-- Botones de acción -->
-            <button (click)="startEditProduct(product)" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg">
-              Editar Producto
+      <div
+        class=" relative group bg-white/90 rounded-3xl shadow-2xl overflow-hidden border border-purple-200 hover:shadow-pink-200 transition-all duration-300">
+        <!-- Efecto decorativo superior -->
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400"></div>
+        <img [src]="product.imageUrl" [alt]="product.name"
+          class="w-full h-48 object-cover rounded-t-3xl group-hover:brightness-90 transition-all duration-300">
+        <div class="p-6 flex flex-col gap-2">
+          <h2
+            class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 mb-1">
+            {{ product.name }}
+          </h2>
+          <p class="text-gray-600 text-sm mb-2 line-clamp-2">{{ product.description }}</p>
+          <div class="flex flex-wrap gap-2 mt-4 mb-4">
+            <span
+              class="inline-block bg-gradient-to-r from-pink-400 to-purple-400 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+              $ {{ product.price }}
+            </span>
+            <span class="inline-block bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">
+              Stock: {{ product.stock }}
+            </span>
+            <span class="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">
+              {{ product.available ? 'Disponible' : 'No disponible' }}
+            </span>
+            <span *ngIf="product.discountPercentage > 0"
+              class="inline-block bg-yellow-100 text-yellow-700 text-xs font-semibold px-3 py-1 rounded-full">
+              -{{ product.discountPercentage }}% OFF
+            </span>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <button (click)="startEditProduct(product)"
+              class="flex-1 py-2 rounded-xl bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white font-bold shadow hover:scale-105 hover:shadow-lg transition-all duration-200 active:scale-95">
+              Editar
             </button>
-            <button (click)="deleteProduct(product.id)" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg mt-2">
-              Eliminar Producto
+            <button (click)="deleteProduct(product.id)"
+              class="flex-1 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-red-500 to-red-600 text-white font-bold shadow hover:scale-105 hover:shadow-lg transition-all duration-200 active:scale-95">
+              Eliminar
             </button>
           </div>
         </div>
-        
         <!-- Formulario de edición -->
-        <div *ngIf="editProductId === product.id" class="p-4">
-          <h3 class="text-lg font-semibold mb-4 text-gray-800">Editar Producto</h3>
-          <div class="space-y-3">
+        <div *ngIf="editProductId === product.id"
+          class="absolute pt-56 inset-0 bg-white/95 flex flex-col justify-center items-center z-20 p-8 animate-fade-in rounded-3xl shadow-2xl border-2 border-pink-300 max-w-lg w-full mx-auto overflow-y-auto max-h-[90vh]">
+          <h3 class="text-lg font-bold mb-4 text-pink-600 text-center">Editar Producto</h3>
+          <div class="w-full space-y-3">
             <div>
-              <label class="block text-gray-700 font-bold mb-2">Nombre</label>
-              <input [(ngModel)]="editingProduct.name" class="w-full border rounded-lg px-3 py-2" required>
+              <label class="block text-gray-700 font-bold mb-1 text-sm">Nombre</label>
+              <input [(ngModel)]="editingProduct.name" class="w-full border rounded-lg px-3 py-2 text-sm" required>
             </div>
             <div>
-              <label class="block text-gray-700 font-bold mb-2">Descripción</label>
-              <textarea [(ngModel)]="editingProduct.description" class="w-full border rounded-lg px-3 py-2" rows="3" required></textarea>
+              <label class="block text-gray-700 font-bold mb-1 text-sm">Descripción</label>
+              <textarea [(ngModel)]="editingProduct.description" class="w-full border rounded-lg px-3 py-2 text-sm"
+                rows="2" required></textarea>
             </div>
             <div>
-              <label class="block text-gray-700 font-bold mb-2">Precio</label>
-              <input type="number" [(ngModel)]="editingProduct.price" class="w-full border rounded-lg px-3 py-2" required>
+              <label class="block text-gray-700 font-bold mb-1 text-sm">Precio</label>
+              <input type="number" [(ngModel)]="editingProduct.price" class="w-full border rounded-lg px-3 py-2 text-sm"
+                required>
             </div>
             <div>
-              <label class="block text-gray-700 font-bold mb-2">Stock</label>
-              <input type="number" [(ngModel)]="editingProduct.stock" class="w-full border rounded-lg px-3 py-2" required>
+              <label class="block text-gray-700 font-bold mb-1 text-sm">Stock</label>
+              <input type="number" [(ngModel)]="editingProduct.stock" class="w-full border rounded-lg px-3 py-2 text-sm"
+                required>
             </div>
             <div>
-              <label class="block text-gray-700 font-bold mb-2">Disponible</label>
-              <select [(ngModel)]="editingProduct.available" class="w-full border rounded-lg px-3 py-2" required>
+              <label class="block text-gray-700 font-bold mb-1 text-sm">Disponible</label>
+              <select [(ngModel)]="editingProduct.available" class="w-full border rounded-lg px-3 py-2 text-sm"
+                required>
                 <option [ngValue]="true">Sí</option>
                 <option [ngValue]="false">No</option>
               </select>
             </div>
             <div>
-              <label class="block text-gray-700 font-bold mb-2">Categoría</label>
-              <select [(ngModel)]="editingProduct.categoryId" class="w-full border rounded-lg px-3 py-2" required>
+              <label class="block text-gray-700 font-bold mb-1 text-sm">Categoría</label>
+              <select [(ngModel)]="editingProduct.categoryId" class="w-full border rounded-lg px-3 py-2 text-sm"
+                required>
                 <option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.name }}</option>
               </select>
             </div>
             <div>
-              <label class="block text-gray-700 font-bold mb-2">URL de Imagen</label>
-              <input [(ngModel)]="editingProduct.imageUrl" class="w-full border rounded-lg px-3 py-2" required>
+              <label class="block text-gray-700 font-bold mb-1 text-sm">URL de Imagen</label>
+              <input [(ngModel)]="editingProduct.imageUrl" class="w-full border rounded-lg px-3 py-2 text-sm" required>
             </div>
             <div>
-              <label class="block text-gray-700 font-bold mb-2">Porcentaje de Descuento</label>
-              <input type="number" [(ngModel)]="editingProduct.discountPercentage" class="w-full border rounded-lg px-3 py-2" required>
+              <label class="block text-gray-700 font-bold mb-1 text-sm">Porcentaje de Descuento</label>
+              <input type="number" [(ngModel)]="editingProduct.discountPercentage"
+                class="w-full border rounded-lg px-3 py-2 text-sm" required>
             </div>
-            <div class="flex space-x-2">
-              <button (click)="updateProduct()" class="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded w-1/2">
+            <div class="flex gap-2 mt-2">
+              <button (click)="updateProduct()"
+                class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-xl font-bold text-sm">
                 Guardar
               </button>
-              <button (click)="cancelEditProduct()" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-3 rounded w-1/2">
+              <button (click)="cancelEditProduct()"
+                class="flex-1 bg-gray-400 hover:bg-gray-500 text-white py-2 px-3 rounded-xl font-bold text-sm">
                 Cancelar
               </button>
             </div>
           </div>
         </div>
+        <!-- Fondo oscuro al editar -->
+        <div *ngIf="editProductId === product.id"
+          class="absolute inset-0 bg-black/30 z-10 rounded-3xl pointer-events-none"></div>
       </div>
     </ng-container>
   </div>
 </div>
 
+
+
 <!-- Mostrar Categorías -->
 <!-- Lista de categorías existentes -->
 <div class="mt-8 mb-6">
-  <h2 class="text-xl font-semibold mb-4">Categorías existentes</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-    <div *ngFor="let category of categories$ | async" class="border p-4 rounded-lg">
+  <h2
+    class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 mb-8 text-center tracking-wide drop-shadow-lg">
+    Categorías existentes
+  </h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div *ngFor="let category of categories$ | async"
+      class="relative bg-white/90 rounded-2xl shadow-xl border border-blue-200 overflow-hidden hover:shadow-pink-200 transition-all duration-300">
+      <!-- Efecto decorativo superior -->
+      <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400"></div>
       <!-- Vista normal (cuando no está en modo edición) -->
-      <div *ngIf="editCategoryId !== category.id">
-        <h3 class="font-medium">{{ category.name }}</h3>
-        <p class="text-gray-600">{{ category.description }}</p>
-        <div class="mt-3 flex space-x-2">
-          <button (click)="startEditCategory(category)" 
-                  class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">
+      <div *ngIf="editCategoryId !== category.id" class="p-6 flex flex-col gap-2">
+        <h3
+          class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 mb-1">
+          {{ category.name }}
+        </h3>
+        <p class="text-gray-600 text-sm mb-2 line-clamp-2">{{ category.description }}</p>
+        <div class="flex gap-2 mt-2">
+          <button (click)="startEditCategory(category)"
+            class="flex-1 py-2 rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-bold shadow hover:scale-105 hover:shadow-lg transition-all duration-200 active:scale-95">
             Editar
           </button>
-          <button (click)="deleteCategory(category.id)" 
-                  class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded">
+          <button (click)="deleteCategory(category.id)"
+            class="flex-1 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-red-500 to-red-600 text-white font-bold shadow hover:scale-105 hover:shadow-lg transition-all duration-200 active:scale-95">
             Eliminar
           </button>
         </div>
       </div>
-      
-      <!-- Formulario de edición -->
-      <div *ngIf="editCategoryId === category.id" class="space-y-3">
+      <!-- Formulario de edición (NO CAMBIAR, SE MANTIENE IGUAL) -->
+      <div *ngIf="editCategoryId === category.id" class="space-y-3 p-4">
         <div>
           <label class="block text-sm font-medium text-gray-700">Nombre</label>
-          <input [(ngModel)]="editingCategory.name" 
-                 class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" 
-                 required>
+          <input [(ngModel)]="editingCategory.name"
+            class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" required>
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700">Descripción</label>
-          <textarea [(ngModel)]="editingCategory.description" 
-                    class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" 
-                    rows="3" required></textarea>
+          <textarea [(ngModel)]="editingCategory.description"
+            class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" rows="3" required></textarea>
         </div>
         <div class="flex space-x-2">
-          <button (click)="updateCategory()" 
-                  class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded">
+          <button (click)="updateCategory()" class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded">
             Guardar
           </button>
-          <button (click)="cancelEditCategory()" 
-                  class="bg-gray-500 hover:bg-gray-600 text-white py-1 px-3 rounded">
+          <button (click)="cancelEditCategory()" class="bg-gray-500 hover:bg-gray-600 text-white py-1 px-3 rounded">
             Cancelar
           </button>
         </div>
@@ -176,25 +289,57 @@
   </div>
 </div>
 
+
+
 <!-- Crear una nueva categoria -->
-<div class="mt-8 mb-6">
-  <h2 class="text-xl font-semibold mb-4">Crear Nueva Categoría</h2>
-  <form (ngSubmit)="createCategory()" #categoryForm="ngForm" class="bg-white shadow-md rounded-lg p-6">
-    <div class="mb-4">
-      <label for="name" class="block text-gray-700 font-bold mb-2">Nombre de la Categoría</label>
-      <input type="text" id="name" [(ngModel)]="newCategory.name" name="name" required class="w-full border rounded-lg px-3 py-2">
+<div class="mt-12 flex justify-center items-center">
+  <form (ngSubmit)="createCategory()" #categoryForm="ngForm"
+    class="relative w-full max-w-md bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-blue-200 animate-fade-in-category">
+    <div
+      class="absolute -top-8 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full p-2 shadow-lg">
+      <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M12 4v16m8-8H4"></path>
+      </svg>
     </div>
-    <div class="mb-4">
-      <label for="description" class="block text-gray-700 font-bold mb-2">Descripción</label>
-      <textarea id="description" [(ngModel)]="newCategory.description" name="description" required class="w-full border rounded-lg px-3 py-2" rows="3"></textarea>
-    </div>
-    <div class="flex space-x-2">
-      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-3 rounded">
-        Crear
-      </button>
-      <button (click)="cancelCreateCategory()" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-3 rounded">
-        Cancelar
-      </button>
+    <h2
+      class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 mb-8 text-center tracking-wide drop-shadow-lg">
+      Crear Nueva Categoría
+    </h2>
+    <div class="space-y-6">
+      <div class="group relative">
+        <input type="text" id="category-name" [(ngModel)]="newCategory.name" name="name" required
+          class="peer w-full border-0 border-b-2 border-blue-300 bg-transparent px-0 py-2 focus:border-pink-400 focus:outline-none transition-all duration-300"
+          placeholder=" " />
+        <label for="category-name"
+          class="absolute left-0 top-2 text-gray-500 text-sm transition-all duration-300
+          peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400
+          peer-focus:-top-5 peer-focus:text-xs peer-focus:text-blue-500
+          peer-[:not(:placeholder-shown)]:-top-5 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500">
+          Nombre de la Categoría
+        </label>
+      </div>
+      <div class="group relative">
+        <textarea id="category-description" [(ngModel)]="newCategory.description" name="description" required
+          class="peer w-full border-0 border-b-2 border-blue-300 bg-transparent px-0 py-2 focus:border-pink-400 focus:outline-none transition-all duration-300 resize-none"
+          placeholder=" " rows="3"></textarea>
+        <label for="category-description"
+          class="absolute left-0 top-2 text-gray-500 text-sm transition-all duration-300
+          peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400
+          peer-focus:-top-5 peer-focus:text-xs peer-focus:text-blue-500
+          peer-[:not(:placeholder-shown)]:-top-5 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-blue-500">
+          Descripción
+        </label>
+      </div>
+      <div class="flex space-x-2">
+        <button type="submit"
+          class="flex-1 py-2 rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-bold shadow hover:scale-105 hover:shadow-lg transition-all duration-200 active:scale-95">
+          Crear
+        </button>
+        <button type="button" (click)="cancelCreateCategory()"
+          class="flex-1 py-2 rounded-xl bg-gray-400 hover:bg-gray-500 text-white font-bold shadow transition-all duration-200 active:scale-95">
+          Cancelar
+        </button>
+      </div>
     </div>
   </form>
 </div>

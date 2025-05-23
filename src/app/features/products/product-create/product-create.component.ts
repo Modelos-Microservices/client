@@ -3,12 +3,18 @@ import { ProductService } from '../../../core/services/product.service';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+import { MessageService } from 'primeng/api';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-product-create',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ToastModule, ButtonModule, RouterModule],
   templateUrl: './product-create.component.html',
-  styleUrl: './product-create.component.css'
+  styleUrl: './product-create.component.scss',
+  providers: [MessageService]
 })
 export class ProductCreateComponent {
 
@@ -16,6 +22,49 @@ export class ProductCreateComponent {
   products$ = this.productsSvc.getAllProducts();
   private readonly categoriesSvc = inject(CategoriesService);
   categories$ = this.categoriesSvc.getAllCategories();
+
+
+  //-------- Mensajes de éxito y error para la creación de productos --------------
+  private messageService = inject(MessageService);
+  // Mensaje de éxito
+  successCreateProductMessage = {
+    severity: 'success',
+    summary: 'Éxito',
+    detail: 'Producto creado con éxito'
+  };
+  // Mensaje de error
+  errorCreateProductMessage = {
+    severity: 'error',
+    summary: 'Error',
+    detail: 'Error al crear el producto'
+  };
+  showCreateProductSuccess() {
+    this.messageService.add(this.successCreateProductMessage);
+  }
+  showCreateProductError() {
+    this.messageService.add(this.errorCreateProductMessage);
+  }
+  showEditProductError() {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Error al editar el producto'
+    });
+  }
+  showEditProductSuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Producto editado con éxito'
+    });
+  }
+  showFormError() {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Por favor complete todos los campos obligatorios correctamente'
+    });
+  }
 
   //crear nuevo producto
   newProduct = {
@@ -31,7 +80,7 @@ export class ProductCreateComponent {
 
   createProduct() {
     if (!this.newProduct.name || !this.newProduct.description || this.newProduct.price <= 0) {
-      alert('Por favor complete todos los campos obligatorios correctamente');
+      this.showFormError();
       return;
     }
 
@@ -52,7 +101,7 @@ export class ProductCreateComponent {
         // Actualizar lista de productos
         this.products$ = this.productsSvc.getAllProducts();
 
-        alert('Producto creado con éxito');
+        this.showCreateProductSuccess();
       },
       error: (error) => {
         console.error('Error al crear producto:', error);
@@ -64,7 +113,7 @@ export class ProductCreateComponent {
         } else if (error.message) {
           errorMsg += ': ' + error.message;
         }
-        alert(errorMsg);
+        this.showCreateProductError();
       }
     });
   }
