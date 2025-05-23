@@ -11,15 +11,15 @@ import { AuthService } from './core/services/auth.service';
 })
 export class AppComponent implements OnInit {
   title = 'Tienda del Diego';
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.authService.initKeycloak()
-      .then(success => {
-        console.log('Inicialización Keycloak:', success ? 'exitosa' : 'fallida');
-      })
-      .catch(error => {
-        console.error('Error en inicialización:', error);
-      });
+    /*    this.authService.initKeycloak()
+          .then(success => {
+            console.log('Inicialización Keycloak:', success ? 'exitosa' : 'fallida');
+          })
+          .catch(error => {
+            console.error('Error en inicialización:', error);
+          }); */
   }
 }

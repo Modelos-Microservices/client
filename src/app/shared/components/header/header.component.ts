@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { Subscription } from 'rxjs';
+import { UserKeyCloakService } from '../../../core/services/user-key-cloak.service';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +16,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   private authSubscription!: Subscription;
 
-  constructor(private authService: AuthService) { }
+  private authSub!: Subscription
+  public admin: boolean | null = null
+
+  constructor(private authService: AuthService, private readonly userService: UserKeyCloakService) { }
 
   ngOnInit(): void {
     // Comprueba el estado inicial
@@ -27,6 +31,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isLoggedIn = status;
       }
     );
+
+
+    this.authSub = this.userService.admin$.subscribe((admin: boolean) => {
+      this.admin = admin
+    })
   }
 
   ngOnDestroy(): void {
