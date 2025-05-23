@@ -3,6 +3,8 @@
 <head>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=favorite" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=favorite" />
 </head>
 
 <header class="fixed top-0 z-50 mx-auto flex h-15 w-full select-none items-center text-white">
@@ -22,7 +24,9 @@
                 <div class="navbare hidden md:flex space-x-8">
                     <a href="/home" class=" hover:text-orange-700 font-medium">Inicio</a>
                     <a href="/products-list" class=" hover:text-orange-700 font-medium">Productos</a>
-                    <a href="/products-create" class=" hover:text-orange-700 font-medium">Crear Producto</a>
+                    @if(admin){
+                        <a href="/products-create" class=" hover:text-orange-700 font-medium">Crear Producto</a>
+                    }
                     <a *ngIf="!isLoggedIn" href="/login" class=" hover:text-orange-700 font-medium">Iniciar
                         Sesión</a>
                     <a (click)="logout(); $event.preventDefault()" *ngIf="isLoggedIn" href="/logout"

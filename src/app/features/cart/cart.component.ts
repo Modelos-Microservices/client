@@ -46,12 +46,12 @@ export class CartComponent implements OnInit {
 
     this.tokenSub = this.userService.token$.subscribe((token : string | null) => {
       if(token){
-        this.loadDebts()
+        this.loadCart()
       }
     })
   }
 
-  private async loadDebts() {
+  private async loadCart() {
     this.order = await this.cartService.getUserCart()
     if(this.order){
       this.orderItems = this.order?.OrderItem
@@ -89,11 +89,11 @@ export class CartComponent implements OnInit {
       console.log(`Cantidad del ítem ${item.productName} actualizada a ${item.quantity}`);
       // Limpiar la bandera de modificación
       this.modifiedItems.delete(item.id);
-      this.loadDebts()
+      this.loadCart()
     } catch (error) {
       console.error('Error al actualizar la cantidad:', error);
       // Recargar el carrito para restaurar el estado en caso de error
-      this.loadDebts();
+      this.loadCart();
     }
   }
 
@@ -107,11 +107,11 @@ export class CartComponent implements OnInit {
       const data : DeleteOrderItemDto = {productId: item.productId}
       await this.cartService.deleteOrderItem(data)
       console.log(`${item.productName} Eliminado correctamente`);
-      this.loadDebts()
+      this.loadCart()
     } catch (error) {
       console.error('Error al elminar el producto', error);
       // Recargar el carrito para restaurar el estado en caso de error
-      this.loadDebts();
+      this.loadCart();
     }
   }
 

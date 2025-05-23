@@ -5,6 +5,7 @@ import { UserService } from './user.service';
 import { UserKeyCloakService } from './user-key-cloak.service';
 import { AuthService } from './auth.service';
 import { DebtDto } from '../entities/user.entitie';
+import { UpdateDebtDto } from '../entities/debt.entitie';
 
 
 @Injectable({
@@ -15,9 +16,9 @@ export class DebtsService {
   private admin: boolean | null = null
   private apiUrl = 'http://localhost:3000/api/customer-debts';
 
-  
+
   constructor(private readonly userService: UserKeyCloakService, private readonly authService: AuthService, private readonly http: HttpClient) {
-   
+
   }
 
   async getDebts() {
@@ -25,7 +26,7 @@ export class DebtsService {
     //si es usuario solo obtiene las deudas de el
     const token = this.authService.token
 
-    if(!token) throw new Error('No token provided')
+    if (!token) throw new Error('No token provided')
 
     if (this.userService.isAdmin()) {
       return this.getAllDebts(token)
@@ -50,7 +51,6 @@ export class DebtsService {
         this.http.get<any>(`${this.apiUrl}/user/${userId}`, { headers })
       )
 
-      console.log('Response:', response);
       return response.data || [];
     } catch (error) {
       console.error('Error al obtener las deudas del usuario:', error);
@@ -59,6 +59,7 @@ export class DebtsService {
   }
 
   private async getAllDebts(token: string) {
+
     try {
       // Configuramos los headers con el token de autenticación
       const headers = new HttpHeaders({
@@ -80,9 +81,9 @@ export class DebtsService {
 
 
   public async createNewDebt(debtData: DebtDto) {
-    const token =  this.authService.token
+    const token = this.authService.token
 
-     try {
+    try {
       // Configuramos los headers con el token de autenticación
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${token}`
@@ -91,6 +92,29 @@ export class DebtsService {
       // Realizamos la petición con los headers configurados
       const response = await firstValueFrom(
         this.http.post<DebtDto>(`${this.apiUrl}/user`, debtData, { headers })
+      );
+
+      console.log('Response:', response);
+      return response || [];
+    } catch (error) {
+      console.error('Error al obtener todas las deudas:', error);
+      throw error;
+    }
+  }
+
+
+  public async payDebt(debtData: UpdateDebtDto) {
+    const token = this.authService.token
+
+    try {
+      // Configuramos los headers con el token de autenticación
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+
+      // Realizamos la petición con los headers configurados
+      const response = await firstValueFrom(
+        this.http.patch<DebtDto>(`${this.apiUrl}`, debtData, { headers })
       );
 
       console.log('Response:', response);

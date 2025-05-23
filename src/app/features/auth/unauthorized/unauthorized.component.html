@@ -1,0 +1,65 @@
+<div class="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+  <div class="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto relative overflow-hidden">
+    <!-- Símbolo de fondo decorativo -->
+    <div class="absolute -right-16 -top-16 opacity-5">
+      <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+      </svg>
+    </div>
+    
+    <!-- Contenido principal -->
+    <div class="text-center relative z-10">
+      <!-- Símbolo de acceso denegado -->
+      <div class="inline-flex items-center justify-center p-3 bg-red-100 rounded-full border-4 border-red-50 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+        </svg>
+      </div>
+      
+      <!-- Código de error -->
+      <div class="text-red-500 font-bold text-lg mb-1">Error 403</div>
+      
+      <!-- Título -->
+      <h1 class="text-2xl font-bold text-gray-800 mb-2">Acceso Denegado</h1>
+      
+      <!-- Línea decorativa -->
+      <div class="h-1 w-16 bg-red-500 mx-auto my-3"></div>
+      
+      <!-- Mensaje -->
+      <p class="text-gray-700 mb-2">
+        No tienes permiso para acceder a esta página.
+      </p>
+      <p class="text-gray-500 text-sm mb-8">
+        Esta área está restringida a usuarios con privilegios específicos.
+      </p>
+      
+      <!-- Botones de acción -->
+      <div class="space-y-3">
+        <!-- Botón principal -->
+        <button
+        (click)="navigateToHome()"
+        type="button" class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          Volver a la página principal
+        </button>
+        
+        <!-- Botón secundario -->
+        <button
+        (click)="navigateToLogin()"
+        type="button" class="w-full bg-white hover:bg-gray-100 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-300 border border-gray-300 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          Iniciar sesión
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
