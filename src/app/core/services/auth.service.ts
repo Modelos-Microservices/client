@@ -57,6 +57,8 @@ public getUserID(): string | null {
     });
   }
 
+
+
   public initKeycloak(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       //el metodo init permite inicializar la instancia de Keycloak y establecer la configuración inicial.

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
+import { createUserDtoKeyCloak } from '../entities/user.dto';
 
 
 export interface User {
@@ -49,6 +50,19 @@ export class UserService {
   // Método para obtener un usuario por su nombre
   getUserByName(name: string): Observable<User> {
     return this._http.get<User>(`${this.apiUrl}?name=${name}`);
+  }
+
+
+  //Metodo para crear un usuario
+  async createUserKeyCloak(data: createUserDtoKeyCloak) {
+    try {
+      const response = await firstValueFrom( this._http.post<any>('http://localhost:3000/api/keyCloak/register', data));
+      console.log(response)
+      return true
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   }
 
 }
