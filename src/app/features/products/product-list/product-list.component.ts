@@ -7,12 +7,17 @@ import { Subscription } from 'rxjs';
 import { CartService } from '../../../core/services/cart.service';
 import { UserKeyCloakService } from '../../../core/services/user-key-cloak.service';
 import { CreateOrderItemDto } from '../../../core/entities/order.entitie';
+import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+import { RouterModule } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-product-list',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ToastModule, ButtonModule, RouterModule],
   templateUrl: './product-list.component.html',
-  styleUrl: './product-list.component.css'
+  styleUrl: './product-list.component.scss',
+  providers: [MessageService]
 })
 export class ProductListComponent implements OnInit {
 
@@ -21,6 +26,14 @@ export class ProductListComponent implements OnInit {
   private readonly categoriesSvc = inject(CategoriesService);
   categories$ = this.categoriesSvc.getAllCategories();
 
+  private readonly messageService = inject(MessageService);
+  
+  showAddProductSuccess() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added to cart successfully!' });
+  }
+  showAddProductError() {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add product to cart.' });
+  }
 
   private tokenSub!: Subscription
   private token: string | null = null
@@ -48,8 +61,10 @@ export class ProductListComponent implements OnInit {
       const respone = await this.cartService.addOrderItem(data)
       console.log(respone)
       //console.log('Item añadido al carrito')
+      this.showAddProductSuccess();
     } catch (error) {
       console.error('Error al agregar un nuevo producto:', error);
+      this.showAddProductError();
     }
 
 
