@@ -13,8 +13,15 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo / Inicio -->
                 <div class="flex-shrink-0">
-                    <a href="/" class="text-xl font-bold hover:text-orange-700">
+                    <a href="/" class="mt-6 pl-4 text-xl font-bold hover:text-orange-700 transition-all duration-300 absolute"
+                        [class.opacity-0]="isScrolled" [class.opacity-100]="!isScrolled">
                         Tienda Del Diego
+                    </a>
+
+                    <!-- Imagen del logo -->
+                    <a href="/" class="block transition-all duration-300 relative" [class.opacity-0]="!isScrolled"
+                        [class.opacity-100]="isScrolled">
+                        <img src="../../../../assets/logo-tienda.png" alt="Tienda Del Diego" class="h-16 w-auto">
                     </a>
                 </div>
 
@@ -24,9 +31,10 @@
                 <div class="navbare hidden md:flex space-x-8">
                     <a href="/home" class=" hover:text-orange-700 font-medium">Inicio</a>
                     <a href="/products-list" class=" hover:text-orange-700 font-medium">Productos</a>
-                    @if(admin){
-                        <a href="/products-create" class=" hover:text-orange-700 font-medium">Crear Producto</a>
-                    }
+                    <!-- @if(admin){ -->
+                    <a href="/products-create" class=" hover:text-orange-700 font-medium">Crear Producto</a>
+
+                    <a href="/debts" class=" hover:text-orange-700 font-medium">Deudas</a>
                     <a *ngIf="!isLoggedIn" href="/login" class=" hover:text-orange-700 font-medium">Iniciar
                         Sesión</a>
                     <a (click)="logout(); $event.preventDefault()" *ngIf="isLoggedIn" href="/logout"
@@ -47,7 +55,8 @@
                 </div>
                 <!-- Botón hamburguesa solo en móvil -->
                 <div class="md:hidden">
-                    <button (click)="showMobileMenu = !showMobileMenu" class="hover:text-orange-700 cursor-pointer text-2xl">
+                    <button (click)="showMobileMenu = !showMobileMenu"
+                        class="hover:text-orange-700 cursor-pointer text-2xl">
                         <ion-icon name="reorder-four-outline"></ion-icon>
                     </button>
                 </div>

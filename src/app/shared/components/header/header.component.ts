@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { Subscription } from 'rxjs';
 import { UserKeyCloakService } from '../../../core/services/user-key-cloak.service';
@@ -19,9 +19,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private authSub!: Subscription
   public admin: boolean | null = null
+  isScrolled: boolean = false;
 
   constructor(private authService: AuthService, private readonly userService: UserKeyCloakService) { }
 
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    // Cambia cuando el scroll sea mayor a 100px
+    this.isScrolled = window.scrollY > 100;
+  }
+  
   ngOnInit(): void {
     // Comprueba el estado inicial
     //this.isLoggedIn = this.authService.isLoggedIn;

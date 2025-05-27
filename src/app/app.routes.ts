@@ -34,18 +34,19 @@ export const routes: Routes = [
       { path: 'register', component: RegisterComponent },
       { path: 'products-list', component: ProductListComponent },
       { path: 'unauthorized', component: UnauthorizedComponent },
-      {
-        path: 'products-create',
-        component: ProductCreateComponent,
-        canActivate: [RoleGuard],
-        data:  { roles: ['admin'] }
-      },
+      // {
+      //   path: 'products-create',
+      //   component: ProductCreateComponent,
+      //   canActivate: [RoleGuard],
+      //   data:  { roles: ['admin'] }
+      // },
+      { path: 'products-create', component: ProductCreateComponent },
       { path: 'favorites', component: FavoritesComponent },
       { path: 'cart', component: CartComponent },
       { path: 'checkout', component: CheckoutComponent },
       { path: 'debts', component: DebtsComponent },
       { path: 'succes', component: SuccesComponent },
-      { path: 'profile', component: ProfileComponent, canActivate: [KeycloakGuard], data: { role: 'user' } },
+      //{ path: 'profile', component: ProfileComponent, canActivate: [KeycloakGuard], data: { role: 'user' } },
     ],
   },
   {
