@@ -23,6 +23,7 @@ export class ProductCreateComponent {
   private readonly categoriesSvc = inject(CategoriesService);
   categories$ = this.categoriesSvc.getAllCategories();
 
+  activeSection: String = 'list-products'; // Sección activa por defecto
 
   //-------- Mensajes de éxito y error para la creación de productos --------------
   private messageService = inject(MessageService);
@@ -65,6 +66,64 @@ export class ProductCreateComponent {
       detail: 'Por favor complete todos los campos obligatorios correctamente'
     });
   }
+
+  showDeleteProductError() {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Error al eliminar el producto'
+    });
+  }
+  showDeleteProductSuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Producto eliminado con éxito'
+    });
+  }
+  showDeleteCategoryError() {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Error al eliminar la categoría'
+    });
+  }
+  showDeleteCategorySuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Categoría eliminada con éxito'
+    });
+  }
+  showCreateCategoryError() {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Error al crear la categoría'
+    });
+  }
+  showCreateCategorySuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Categoría creada con éxito'
+    });
+  }
+  showEditCategoryError() {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Error al editar la categoría'
+    });
+  }
+  showEditCategorySuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Categoría editada con éxito'
+    });
+  }
+
 
   //crear nuevo producto
   newProduct = {
@@ -270,7 +329,7 @@ export class ProductCreateComponent {
   async createCategory() {
     // Validación básica de datos antes de enviar
     if (!this.newCategory.name || !this.newCategory.description) {
-      alert('Por favor complete todos los campos obligatorios');
+      this.showFormError();
       return;
     }
 
@@ -283,10 +342,10 @@ export class ProductCreateComponent {
         name: '',
         description: ''
       };
-      alert('Categoría creada con éxito');
+      this.showCreateCategorySuccess();
     } catch (error) {
       console.error('Error al crear categoría:', error);
-      alert('Error al crear categoría');
+      this.showCreateCategoryError();
     }
   }
   // Método para cancelar la creación de una categoría
@@ -324,7 +383,7 @@ export class ProductCreateComponent {
     }
 
     if (!this.editingCategory.name || !this.editingCategory.description) {
-      alert('Por favor complete todos los campos obligatorios correctamente');
+      this.showFormError();
       return;
     }
 
@@ -340,7 +399,7 @@ export class ProductCreateComponent {
         // Actualizar lista de categorías
         this.categories$ = this.categoriesSvc.getAllCategories();
 
-        alert('Categoría actualizada con éxito');
+        this.showEditCategorySuccess();
       },
       error: (error) => {
         console.error('Error al actualizar categoría:', error);
@@ -351,7 +410,7 @@ export class ProductCreateComponent {
         } else if (error.message) {
           errorMsg += ': ' + error.message;
         }
-        alert(errorMsg);
+        this.showEditCategoryError();
       }
     });
   }
