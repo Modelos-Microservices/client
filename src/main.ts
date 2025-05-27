@@ -1,3 +1,13 @@
+// import { bootstrapApplication } from '@angular/platform-browser';
+// import { appConfig } from './app/app.config';
+// import { AppComponent } from './app/app.component';
+// import { defineCustomElements } from '@ionic/core/loader';
+
+// defineCustomElements();
+
+// bootstrapApplication(AppComponent, appConfig)
+//   .catch((err) => console.error(err));
+
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config'; // Asumo que app.config.ts exporta ApplicationConfig
 import { AppComponent } from './app/app.component';
