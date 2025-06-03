@@ -1,0 +1,40 @@
+html, body {
+  overflow: hidden;
+  height: 100%;
+}
+section {
+  max-height: 100vh;
+  overflow: hidden;
+}
+$button-width: 120px;
+$border-radius: 5px;
+
+.click-btn {
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem;
+  line-height: 35px;
+  border-radius: $border-radius;
+  text-align: center;
+  font-size: 16px;
+  color: #000;
+  text-decoration: none;
+  transition: all 0.35s;
+  box-sizing: border-box;
+}
+
+
+.btn-style2 {
+  $btn-color: #dd7e2a;
+  $btn-hover-color: #8b9b3e;
+  border-color: $btn-color;
+  &:hover {
+    box-shadow: 0 0.25em 0.25em -0.1em $btn-hover-color;
+    transform: translateY(-0.25em);
+    border-color: $btn-hover-color;
+    color: $btn-hover-color;
+    background-color: #454f11;
+  }
+}
