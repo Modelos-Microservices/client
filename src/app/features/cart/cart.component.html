@@ -1,8 +1,8 @@
 <div class="min-h-screen container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold text-gray-800 mb-6">Tu Carrito</h1>
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 mt-8 text-center">Tu Carrito</h1>
 
-  <div class="flex flex-col lg:flex-row gap-8">
-    <!-- Cart Items Column - MANTENIDO EXACTAMENTE IGUAL AL ORIGINAL -->
+  <div class="flex flex-col lg:flex-row gap-8 mt-24 ">
+    <!-- Cart Items Column -  -->
     <div class="w-full lg:w-2/3">
       @for(item of orderItems; track item.id){
       <div
@@ -60,7 +60,7 @@
         </div>
       </div>
       } @empty {
-      <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center shadow-sm">
+      <div class="ml-70 bg-gray-50 border border-gray-200 rounded-lg p-8 text-center shadow-sm w-full">
         <div class="flex justify-center mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">
@@ -77,7 +77,7 @@
       }
     </div>
 
-    <!-- Order Summary Column - MEJORADO CON ESTILOS PROFESIONALES EN AZUL -->
+    <!-- Order Summary Column - -->
     <div class="w-full lg:w-1/3 mt-8 lg:mt-0">
       @if(order && orderItems?.length){
       <div class="bg-white border border-blue-100 rounded-lg shadow-lg p-6 sticky top-4">
@@ -85,58 +85,68 @@
           Resumen de la Orden
           <span class="ml-2 bg-blue-100 text-blue-600 text-xs py-1 px-2 rounded-full">{{order.totalItems}} items</span>
         </h2>
-        
+
         <div class="space-y-4 mb-6">
           <div class="flex justify-between items-center">
             <span class="text-gray-600 flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               Fecha:
             </span>
             <span class="font-medium text-gray-800">{{order.createdAt}}</span>
           </div>
-          
+
           <div class="flex justify-between items-center">
             <span class="text-gray-600 flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
               Cantidad de artículos:
             </span>
             <span class="font-medium text-gray-800">{{order.totalItems}}</span>
           </div>
-          
+
           <div class="flex justify-between items-center pt-4 mt-2 border-t border-blue-100">
             <span class="text-lg font-semibold text-blue-800 flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Total:
             </span>
             <span class="text-2xl font-bold text-blue-700">${{order.total_amount | number:'1.0-0'}}</span>
           </div>
         </div>
-        
-        <button
-        (click)="payOrder()"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+        <button (click)="payOrder()"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
             <line x1="1" y1="10" x2="23" y2="10"></line>
           </svg>
           Pagar
         </button>
-        
+
         <div class="mt-4 pt-4 border-t border-blue-100">
           <div class="flex items-center justify-center space-x-3 mb-3">
             <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Visa" class="h-6 w-auto opacity-70" />
-            <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="MasterCard" class="h-6 w-auto opacity-70" />
-            <img src="https://cdn-icons-png.flaticon.com/512/196/196565.png" alt="PayPal" class="h-6 w-auto opacity-70" />
+            <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="MasterCard"
+              class="h-6 w-auto opacity-70" />
+            <img src="https://cdn-icons-png.flaticon.com/512/196/196565.png" alt="PayPal"
+              class="h-6 w-auto opacity-70" />
           </div>
           <p class="text-center text-sm text-gray-500 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-blue-500" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
             Pago seguro y procesado al instante
           </p>
