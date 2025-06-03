@@ -1,0 +1,22 @@
+# Dockerfile para desarrollo
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copiar package files
+COPY package*.json ./
+
+# Instalar Angular CLI globalmente
+RUN npm install -g @angular/cli
+
+# Instalar dependencias
+RUN npm ci
+
+# Copiar código fuente
+COPY . .
+
+# Exponer puerto 4200
+EXPOSE 4200
+
+# Comando por defecto para desarrollo
+CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200"]

@@ -1,0 +1,19 @@
+services:
+  angular-dev:
+    build:
+      context: .
+      dockerfile: dockerfile.dev  # Usar el dockerfile de desarrollo
+    container_name: angular-dev
+    ports:
+      - "4200:4200"  # Cambiar puerto a 4200
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
