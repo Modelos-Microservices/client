@@ -60,4 +60,18 @@ export class UserKeyCloakService {
       return null
     }
   }
+
+    // En user-key-cloak.service.ts
+  public async getCurrentUser(): Promise<UserKeyCloak | null> {
+    try {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`
+      });
+      const url = this.authService.backendUrl + 'customer-debts/keycloak/me'; // Ajusta la ruta según tu API
+      return await firstValueFrom(this.http.get<UserKeyCloak>(url, { headers }));
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
 }
