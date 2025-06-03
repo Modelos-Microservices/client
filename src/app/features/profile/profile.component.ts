@@ -94,8 +94,8 @@ export class ProfileComponent implements OnInit {
     setTimeout(() => {
       this.user = {
         id: '12345',
-        name: 'Diego García',
-        email: 'diego@example.com',
+        name: 'Bad Bunny',
+        email: 'badbunny@example.com',
         phone: '301-234-5678',
         address: 'Calle Principal 123',
         city: 'Pasto',
