@@ -45,6 +45,13 @@ export class ProductCreateComponent {
   showCreateProductError() {
     this.messageService.add(this.errorCreateProductMessage);
   }
+  showMostrarShow() {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Información',
+      detail: 'Esta es una sección de demostración'
+    });
+  }
   showEditProductError() {
     this.messageService.add({
       severity: 'error',
@@ -184,11 +191,11 @@ export class ProductCreateComponent {
         next: () => {
           // Actualizar lista de productos
           this.products$ = this.productsSvc.getAllProducts();
-          alert('Producto eliminado con éxito');
+          this.showDeleteProductSuccess();
         },
         error: (error) => {
           console.error('Error al eliminar producto:', error);
-          alert('Error al eliminar producto');
+          this.showDeleteProductError();
         }
       });
     }
@@ -255,7 +262,7 @@ export class ProductCreateComponent {
     }
 
     if (!this.editingProduct.name || !this.editingProduct.description || this.editingProduct.price <= 0) {
-      alert('Por favor complete todos los campos obligatorios correctamente');
+      this.showFormError();
       return;
     }
 
@@ -277,7 +284,7 @@ export class ProductCreateComponent {
         // Actualizar lista de productos
         this.products$ = this.productsSvc.getAllProducts();
 
-        alert('Producto actualizado con éxito');
+        this.showEditProductSuccess();
       },
       error: (error) => {
         console.error('Error al actualizar producto:', error);
@@ -288,7 +295,7 @@ export class ProductCreateComponent {
         } else if (error.message) {
           errorMsg += ': ' + error.message;
         }
-        alert(errorMsg);
+        this.showEditProductError();
       }
     });
   }
@@ -304,10 +311,10 @@ export class ProductCreateComponent {
         await this.categoriesSvc.deleteCategory(categoryId).toPromise();
         // Actualizar lista de categorías
         this.categories$ = this.categoriesSvc.getAllCategories();
-        alert('Categoría eliminada con éxito');
+        this.showDeleteCategorySuccess();
       } catch (error) {
         console.error('Error al eliminar categoría:', error);
-        alert('Error al eliminar categoría');
+        this.showDeleteCategoryError();
       }
     }
   }

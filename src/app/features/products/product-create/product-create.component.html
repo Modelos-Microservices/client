@@ -138,190 +138,249 @@
               class="mt-6 w-full py-3 rounded-xl border border-orange-400 text-orange-600 font-bold text-lg bg-white hover:bg-orange-50  btn-style2 duration-500">
               Crear Producto
             </button>
-            <p-button (onClick)="showCreateProductSuccess()" label="Show" />
+            <p-button (onClick)="showMostrarShow()" label="Show" />
 
           </div>
         </form>
       </div>
     </section>
     <!-- Mostrar Productos -->
+    <!-- Mostrar Productos -->
     <section *ngIf="activeSection === 'list-products'">
       <div class="container mx-auto px-4 py-16">
         <h1 class="text-3xl font-bold text-gray-800 mb-10 text-center tracking-wide">
           Nuestros Productos
         </h1>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <ng-container *ngFor="let product of products$ | async">
-            <div
-              class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300 flex flex-col">
 
-              <!-- Imagen del producto -->
-              <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-48 object-cover">
+        <!-- Lista de productos en tabla -->
+        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descuento
+                  </th>
+                  <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr *ngFor="let product of products$ | async" class="hover:bg-gray-50 transition-colors duration-200">
+                  <!-- Producto (Imagen + Nombre + Descripción) -->
+                  <td class="px-6 py-4">
+                    <div class="flex items-center">
+                      <img [src]="product.imageUrl" [alt]="product.name" class="h-12 w-12 rounded-lg object-cover mr-4">
+                      <div>
+                        <div class="text-sm font-semibold text-gray-900">{{ product.name }}</div>
+                        <div class="text-sm text-gray-500 truncate max-w-xs">{{ product.description }}</div>
+                      </div>
+                    </div>
+                  </td>
 
-              <!-- Detalles del producto -->
-              <div class="p-6 flex flex-col flex-grow">
-                <h2 class="text-xl font-semibold text-gray-800 mb-2">
-                  {{ product.name }}
-                </h2>
-                <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ product.description }}</p>
+                  <!-- Precio -->
+                  <td class="px-6 py-4">
+                    <div class="text-lg font-bold text-gray-900">
+                      $ {{ product.price | number:'1.0-0' }}
+                    </div>
+                  </td>
 
-                <!-- Precio distintivo separado -->
-                <div class="mb-4">
-                  <span class="text-2xl font-bold text-gray-900">
-                    $ {{ product.price | number:'1.0-0' }}
-                  </span>
+                  <!-- Stock -->
+                  <td class="px-6 py-4">
+                    <span
+                      class="inline-block bg-orange-100 text-orange-700 text-xs font-semibold px-3 py-1 rounded-full">
+                      {{ product.stock }}
+                    </span>
+                  </td>
+
+                  <!-- Estado -->
+                  <td class="px-6 py-4">
+                    <span [ngClass]="{
+                      'bg-green-100 text-green-700': product.available,
+                      'bg-red-100 text-red-700': !product.available
+                    }" class="inline-block text-xs font-semibold px-3 py-1 rounded-full">
+                      {{ product.available ? 'Disponible' : 'No disponible' }}
+                    </span>
+                  </td>
+
+                  <!-- Descuento -->
+                  <td class="px-6 py-4">
+                    <span *ngIf="product.discountPercentage > 0"
+                      class="inline-block bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1 rounded-full">
+                      -{{ product.discountPercentage }}% OFF
+                    </span>
+                    <span *ngIf="product.discountPercentage === 0" class="text-gray-400 text-xs">
+                      Sin descuento
+                    </span>
+                  </td>
+
+                  <!-- Acciones -->
+                  <td class="px-6 py-4 text-right">
+                    <div class="flex gap-2 justify-end">
+                      <button (click)="startEditProduct(product)"
+                        class="px-3 py-1 rounded-lg bg-gray-900 text-white text-xs font-medium hover:bg-gray-800 transition-colors duration-200">
+                        Editar
+                      </button>
+                      <button (click)="deleteProduct(product.id)"
+                        class="px-3 py-1 rounded-lg bg-red-600 text-white text-xs font-medium hover:bg-red-700 transition-colors duration-200">
+                        Eliminar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Formulario de edición (Modal) -->
+        <div *ngIf="editProductId !== null" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+              <h3 class="text-lg font-bold mb-4 text-gray-800 text-center">Editar Producto</h3>
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-gray-700 font-bold mb-1 text-sm">Nombre</label>
+                  <input [(ngModel)]="editingProduct.name" class="w-full border rounded-lg px-3 py-2 text-sm" required>
                 </div>
-
-                <!-- Etiquetas de información -->
-                <div class="flex flex-wrap gap-2 mb-4">
-                  <span class="inline-block bg-orange-100 text-orange-700 text-xs font-semibold px-3 py-1 rounded-full">
-                    Stock: {{ product.stock }}
-                  </span>
-                  <span class="inline-block bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">
-                    {{ product.available ? 'Disponible' : 'No disponible' }}
-                  </span>
-                  <span *ngIf="product.discountPercentage > 0"
-                    class="inline-block bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1 rounded-full">
-                    -{{ product.discountPercentage }}% OFF
-                  </span>
+                <div>
+                  <label class="block text-gray-700 font-bold mb-1 text-sm">Descripción</label>
+                  <textarea [(ngModel)]="editingProduct.description" class="w-full border rounded-lg px-3 py-2 text-sm"
+                    rows="2" required></textarea>
                 </div>
-
-                <!-- Botones siempre al final -->
-                <div class="flex gap-2 mt-auto">
-                  <button (click)="startEditProduct(product)"
-                    class="flex-1 py-2 rounded-lg bg-gray-900 text-white font-medium hover:bg-gray-800 transition-colors duration-200">
-                    Editar
+                <div>
+                  <label class="block text-gray-700 font-bold mb-1 text-sm">Precio</label>
+                  <input type="number" [(ngModel)]="editingProduct.price"
+                    class="w-full border rounded-lg px-3 py-2 text-sm" required>
+                </div>
+                <div>
+                  <label class="block text-gray-700 font-bold mb-1 text-sm">Stock</label>
+                  <input type="number" [(ngModel)]="editingProduct.stock"
+                    class="w-full border rounded-lg px-3 py-2 text-sm" required>
+                </div>
+                <div>
+                  <label class="block text-gray-700 font-bold mb-1 text-sm">Disponible</label>
+                  <select [(ngModel)]="editingProduct.available" class="w-full border rounded-lg px-3 py-2 text-sm"
+                    required>
+                    <option [ngValue]="true">Sí</option>
+                    <option [ngValue]="false">No</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-gray-700 font-bold mb-1 text-sm">Categoría</label>
+                  <select [(ngModel)]="editingProduct.categoryId" class="w-full border rounded-lg px-3 py-2 text-sm"
+                    required>
+                    <option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.name }}
+                    </option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-gray-700 font-bold mb-1 text-sm">URL de Imagen</label>
+                  <input [(ngModel)]="editingProduct.imageUrl" class="w-full border rounded-lg px-3 py-2 text-sm"
+                    required>
+                </div>
+                <div>
+                  <label class="block text-gray-700 font-bold mb-1 text-sm">Porcentaje de Descuento</label>
+                  <input type="number" [(ngModel)]="editingProduct.discountPercentage"
+                    class="w-full border rounded-lg px-3 py-2 text-sm" required>
+                </div>
+                <div class="flex gap-2 mt-4">
+                  <button (click)="updateProduct()"
+                    class="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2 px-3 rounded-lg font-medium text-sm">
+                    Guardar
                   </button>
-                  <button (click)="deleteProduct(product.id)"
-                    class="flex-1 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors duration-200">
-                    Eliminar
+                  <button (click)="cancelEditProduct()"
+                    class="flex-1 bg-gray-400 hover:bg-gray-500 text-white py-2 px-3 rounded-lg font-medium text-sm">
+                    Cancelar
                   </button>
                 </div>
               </div>
-
-              <!-- Formulario de edición -->
-              <div *ngIf="editProductId === product.id"
-                class="absolute inset-0 bg-white/95 flex flex-col justify-center items-center z-20 p-8 animate-fade-in rounded-lg shadow-2xl border-2 border-gray-300 max-w-lg w-full mx-auto overflow-y-auto max-h-[90vh]">
-                <h3 class="text-lg font-bold mb-4 text-gray-800 text-center">Editar Producto</h3>
-                <div class="w-full space-y-3">
-                  <div>
-                    <label class="block text-gray-700 font-bold mb-1 text-sm">Nombre</label>
-                    <input [(ngModel)]="editingProduct.name" class="w-full border rounded-lg px-3 py-2 text-sm"
-                      required>
-                  </div>
-                  <div>
-                    <label class="block text-gray-700 font-bold mb-1 text-sm">Descripción</label>
-                    <textarea [(ngModel)]="editingProduct.description"
-                      class="w-full border rounded-lg px-3 py-2 text-sm" rows="2" required></textarea>
-                  </div>
-                  <div>
-                    <label class="block text-gray-700 font-bold mb-1 text-sm">Precio</label>
-                    <input type="number" [(ngModel)]="editingProduct.price"
-                      class="w-full border rounded-lg px-3 py-2 text-sm" required>
-                  </div>
-                  <div>
-                    <label class="block text-gray-700 font-bold mb-1 text-sm">Stock</label>
-                    <input type="number" [(ngModel)]="editingProduct.stock"
-                      class="w-full border rounded-lg px-3 py-2 text-sm" required>
-                  </div>
-                  <div>
-                    <label class="block text-gray-700 font-bold mb-1 text-sm">Disponible</label>
-                    <select [(ngModel)]="editingProduct.available" class="w-full border rounded-lg px-3 py-2 text-sm"
-                      required>
-                      <option [ngValue]="true">Sí</option>
-                      <option [ngValue]="false">No</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-gray-700 font-bold mb-1 text-sm">Categoría</label>
-                    <select [(ngModel)]="editingProduct.categoryId" class="w-full border rounded-lg px-3 py-2 text-sm"
-                      required>
-                      <option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.name }}
-                      </option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-gray-700 font-bold mb-1 text-sm">URL de Imagen</label>
-                    <input [(ngModel)]="editingProduct.imageUrl" class="w-full border rounded-lg px-3 py-2 text-sm"
-                      required>
-                  </div>
-                  <div>
-                    <label class="block text-gray-700 font-bold mb-1 text-sm">Porcentaje de Descuento</label>
-                    <input type="number" [(ngModel)]="editingProduct.discountPercentage"
-                      class="w-full border rounded-lg px-3 py-2 text-sm" required>
-                  </div>
-                  <div class="flex gap-2 mt-2">
-                    <button (click)="updateProduct()"
-                      class="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2 px-3 rounded-lg font-medium text-sm">
-                      Guardar
-                    </button>
-                    <button (click)="cancelEditProduct()"
-                      class="flex-1 bg-gray-400 hover:bg-gray-500 text-white py-2 px-3 rounded-lg font-medium text-sm">
-                      Cancelar
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Fondo oscuro al editar -->
-              <div *ngIf="editProductId === product.id"
-                class="absolute inset-0 bg-black/30 z-10 rounded-lg pointer-events-none"></div>
             </div>
-          </ng-container>
+          </div>
         </div>
       </div>
     </section>
 
 
     <!-- Mostrar Categorías -->
-    <!-- Lista de categorías existentes -->
-        <section *ngIf="activeSection === 'list-categories'">
+    <section *ngIf="activeSection === 'list-categories'">
       <div class="container mx-auto px-4 py-16">
         <h2 class="text-3xl font-bold text-gray-800 mb-10 text-center tracking-wide">
           Categorías Existentes
         </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <div *ngFor="let category of categories$ | async"
-            class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
-            
-            <!-- Vista normal (cuando no está en modo edición) -->
-            <div *ngIf="editCategoryId !== category.id" class="p-6 flex flex-col flex-grow">
-              <h3 class="text-lg font-semibold text-gray-800 mb-2">
-                {{ category.name }}
-              </h3>
-              <p class="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">{{ category.description }}</p>
-              <div class="flex gap-2 mt-auto">
-                <button (click)="startEditCategory(category)"
-                  class="flex-1 py-2 rounded-lg bg-gray-900 text-white font-medium hover:bg-gray-800 transition-colors duration-200">
-                  Editar
-                </button>
-                <button (click)="deleteCategory(category.id)"
-                  class="flex-1 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors duration-200">
-                  Eliminar
-                </button>
-              </div>
-            </div>
-            
-            <!-- Formulario de edición -->
-            <div *ngIf="editCategoryId === category.id" class="p-6">
+
+        <!-- Lista de categorías en tabla -->
+        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción
+                  </th>
+                  <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr *ngFor="let category of categories$ | async"
+                  class="hover:bg-gray-50 transition-colors duration-200">
+                  <!-- Nombre -->
+                  <td class="px-6 py-4">
+                    <div class="text-sm font-semibold text-gray-900">{{ category.name }}</div>
+                  </td>
+
+                  <!-- Descripción -->
+                  <td class="px-6 py-4">
+                    <div class="text-sm text-gray-500 max-w-xs truncate">{{ category.description }}</div>
+                  </td>
+
+                  <!-- Acciones -->
+                  <td class="px-6 py-4 text-right">
+                    <div class="flex gap-2 justify-end">
+                      <button (click)="startEditCategory(category)"
+                        class="px-3 py-1 rounded-lg bg-gray-900 text-white text-xs font-medium hover:bg-gray-800 transition-colors duration-200">
+                        Editar
+                      </button>
+                      <button (click)="deleteCategory(category.id)"
+                        class="px-3 py-1 rounded-lg bg-red-600 text-white text-xs font-medium hover:bg-red-700 transition-colors duration-200">
+                        Eliminar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Formulario de edición (Modal) -->
+        <div *ngIf="editCategoryId !== null"
+          class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+              <h3 class="text-lg font-bold mb-4 text-gray-800 text-center">Editar Categoría</h3>
               <div class="space-y-3">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                  <input [(ngModel)]="editingCategory.name"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500" required>
+                  <label class="block text-gray-700 font-bold mb-1 text-sm">Nombre</label>
+                  <input [(ngModel)]="editingCategory.name" class="w-full border rounded-lg px-3 py-2 text-sm" required>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-                  <textarea [(ngModel)]="editingCategory.description"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500" rows="3" required></textarea>
+                  <label class="block text-gray-700 font-bold mb-1 text-sm">Descripción</label>
+                  <textarea [(ngModel)]="editingCategory.description" class="w-full border rounded-lg px-3 py-2 text-sm"
+                    rows="3" required></textarea>
                 </div>
                 <div class="flex gap-2 mt-4">
-                  <button (click)="updateCategory()" 
-                    class="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2 px-3 rounded-lg font-medium">
+                  <button (click)="updateCategory()"
+                    class="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2 px-3 rounded-lg font-medium text-sm">
                     Guardar
                   </button>
                   <button (click)="cancelEditCategory()"
-                    class="flex-1 bg-gray-400 hover:bg-gray-500 text-white py-2 px-3 rounded-lg font-medium">
+                    class="flex-1 bg-gray-400 hover:bg-gray-500 text-white py-2 px-3 rounded-lg font-medium text-sm">
                     Cancelar
                   </button>
                 </div>
