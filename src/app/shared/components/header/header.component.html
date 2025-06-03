@@ -13,7 +13,8 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo / Inicio -->
                 <div class="flex-shrink-0">
-                    <a href="/" class="mt-6 pl-4 text-xl font-bold hover:text-orange-700 transition-all duration-300 absolute"
+                    <a href="/"
+                        class="mt-6 pl-4 text-xl font-bold hover:text-orange-700 transition-all duration-300 absolute"
                         [class.opacity-0]="isScrolled" [class.opacity-100]="!isScrolled">
                         Tienda Del Diego
                     </a>
@@ -31,9 +32,8 @@
                 <div class="navbare hidden md:flex space-x-8">
                     <a href="/home" class=" hover:text-orange-700 font-medium">Inicio</a>
                     <a href="/products-list" class=" hover:text-orange-700 font-medium">Productos</a>
-                    <!-- @if(admin){ -->
-                    <a href="/products-create" class=" hover:text-orange-700 font-medium">Crear Producto</a>
-
+                    @if(admin){ <a href="/products-create" class=" hover:text-orange-700 font-medium">Crear Producto</a>
+                    }
                     <a href="/debts" class=" hover:text-orange-700 font-medium">Deudas</a>
                     <a *ngIf="!isLoggedIn" href="/login" class=" hover:text-orange-700 font-medium">Iniciar
                         Sesión</a>

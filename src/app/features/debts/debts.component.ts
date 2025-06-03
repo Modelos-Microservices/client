@@ -102,7 +102,12 @@ export class DebtsComponent implements OnInit {
     this.checkPendingDebts(); // Llamar a la función para verificar deudas pendientes
     this.readyDebts = true;
 
+    this.pendingCount = 0
+    this.expiredCount = 0
+    this.paidCount = 0
+
     this.debts.forEach(debt => {
+
       if (debt.status === DebtStatus.PENDING) this.pendingCount++
       if (debt.status === DebtStatus.EXPIRED) this.expiredCount++
       if (debt.status === DebtStatus.PAID) this.paidCount++
@@ -237,6 +242,6 @@ export class DebtsComponent implements OnInit {
 
   }
 
-  
+
 
 }
