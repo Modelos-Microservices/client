@@ -1,10 +1,14 @@
 <div class="bg-gray-50 min-h-screen">
   <!-- Hero Section -->
-  <section class="mt-16 bg-cover bg-center h-[500px] flex items-center justify-center" style="background-image: url('https://i.imgur.com/itteTpM.jpeg');">
-    <div class="text-center text-white">
-      <h1 class="text-4xl md:text-6xl font-bold mb-4">Bienvenido a Tienda del Diego</h1>
+  <section class="relative mt-16 bg-cover bg-center h-[500px] flex items-center justify-center overflow-hidden"
+    style="background-image: url('https://i.imgur.com/ZfkXXlh.jpeg');">
+    <div class="absolute inset-0 bg-black/40 animate-fade-in"></div>
+    <div class="relative z-10 text-center text-white animate-fade-up">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg animate-pulse">Bienvenido a Tienda del Diego</h1>
       <p class="text-lg md:text-xl mb-6">Encuentra los mejores productos al mejor precio</p>
-       <div class="flex items-center justify-center"><a class="click-btn btn-style1" href="/products-list">Ver Productos</a></div>
+      <div class="flex items-center justify-center">
+        <a class="click-btn btn-style1 animate-bounce" href="/products-list">Ver Productos</a>
+      </div>
     </div>
   </section>
 
@@ -15,28 +19,35 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Categoría 1 -->
         <a href="/category/aseo" class="group block bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg">
-          <img  src="https://exitocol.vtexassets.com/assets/vtex.file-manager-graphql/images/73015886-0934-44af-9bc6-e43c2dc6f5bb___ecc0c53a73eb6a5d91bb568a3ac682f8.jpg" alt="Electrónica" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+          <img
+            src="https://exitocol.vtexassets.com/assets/vtex.file-manager-graphql/images/73015886-0934-44af-9bc6-e43c2dc6f5bb___ecc0c53a73eb6a5d91bb568a3ac682f8.jpg"
+            alt="Electrónica" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
           <div class="p-4">
             <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600">Aseo</h3>
           </div>
         </a>
         <!-- Categoría 2 -->
         <a href="/category/frutas" class="group block bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg">
-          <img src="https://caracol.com.co/resizer/v2/NMSFVECYUFA4DK4BCDNMJS4D5M.jpg?auth=d5702840ebb56e4e0661bee48055281eb2e030982a2ef11f6172f83df2eede79&width=650&height=488&quality=70&smart=true" alt="Moda" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+          <img
+            src="https://caracol.com.co/resizer/v2/NMSFVECYUFA4DK4BCDNMJS4D5M.jpg?auth=d5702840ebb56e4e0661bee48055281eb2e030982a2ef11f6172f83df2eede79&width=650&height=488&quality=70&smart=true"
+            alt="Moda" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
           <div class="p-4">
             <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600">Frutas y verduras</h3>
           </div>
         </a>
         <!-- Categoría 3 -->
         <a href="/category/hogar" class="group block bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg">
-          <img src="https://http2.mlstatic.com/D_NQ_NP_968307-MLA71214866320_082023-F.webp" alt="Hogar" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+          <img src="https://http2.mlstatic.com/D_NQ_NP_968307-MLA71214866320_082023-F.webp" alt="Hogar"
+            class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
           <div class="p-4">
             <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600">Hogar</h3>
           </div>
         </a>
         <!-- Categoría 4 -->
         <a href="/category/deportes" class="group block bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg">
-          <img src="https://exitocol.vtexassets.com/assets/vtex.file-manager-graphql/images/7c31c3a2-280a-497a-a4c0-80f6190a7000___5d2dee2fbca1944765ca6c7078224667.jpg" alt="Deportes" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+          <img
+            src="https://exitocol.vtexassets.com/assets/vtex.file-manager-graphql/images/7c31c3a2-280a-497a-a4c0-80f6190a7000___5d2dee2fbca1944765ca6c7078224667.jpg"
+            alt="Deportes" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
           <div class="p-4">
             <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600">Deportes</h3>
           </div>
@@ -52,44 +63,56 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Producto 1 -->
         <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg">
-          <img src="https://exitocol.vtexassets.com/arquivos/ids/26980945/BEBIDA-ENERGIZANTE-ULTRA-1324336_a.jpg?v=638768896326270000" alt="Producto 1" class="w-full h-48 object-cover">
+          <img
+            src="https://exitocol.vtexassets.com/arquivos/ids/26980945/BEBIDA-ENERGIZANTE-ULTRA-1324336_a.jpg?v=638768896326270000"
+            alt="Producto 1" class="w-full h-48 object-cover">
           <div class="p-4">
             <h3 class="text-lg font-semibold text-gray-800">Monster White 600ml</h3>
             <p class="text-gray-600">$5.99</p>
-            <a href="/product/1" class="block mt-4 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg">
+            <a href="/product/1"
+              class="block mt-4 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg">
               Ver Detalles
             </a>
           </div>
         </div>
         <!-- Producto 2 -->
         <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg">
-          <img src="https://www.apple.com/newsroom/images/2024/09/apple-debuts-iphone-16-pro-and-iphone-16-pro-max/article/Apple-iPhone-16-Pro-hero-geo-240909_inline.jpg.large.jpg" alt="Producto 2" class="w-full h-48 object-cover">
+          <img
+            src="https://www.apple.com/newsroom/images/2024/09/apple-debuts-iphone-16-pro-and-iphone-16-pro-max/article/Apple-iPhone-16-Pro-hero-geo-240909_inline.jpg.large.jpg"
+            alt="Producto 2" class="w-full h-48 object-cover">
           <div class="p-4">
             <h3 class="text-lg font-semibold text-gray-800">Iphone 16 Pro</h3>
             <p class="text-gray-600">$1049.99</p>
-            <a href="/product/2" class="block mt-4 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg">
+            <a href="/product/2"
+              class="block mt-4 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg">
               Ver Detalles
             </a>
           </div>
         </div>
         <!-- Producto 3 -->
         <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg">
-          <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/macbook-air-og-202503?wid=1200&hei=630&fmt=jpeg&qlt=95&.v=1739216814915" alt="Producto 3" class="w-full h-48 object-cover">
+          <img
+            src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/macbook-air-og-202503?wid=1200&hei=630&fmt=jpeg&qlt=95&.v=1739216814915"
+            alt="Producto 3" class="w-full h-48 object-cover">
           <div class="p-4">
             <h3 class="text-lg font-semibold text-gray-800">MacBook air 13 Pulgadas</h3>
             <p class="text-gray-600">$2229.99</p>
-            <a href="/product/3" class="block mt-4 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg">
+            <a href="/product/3"
+              class="block mt-4 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg">
               Ver Detalles
             </a>
           </div>
         </div>
         <!-- Producto 4 -->
         <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg">
-          <img src="https://co.tiendasishop.com/cdn/shop/files/IMG-16751976_a1d13a6f-4c4e-41b0-ba6b-d45339828b78_grande.jpg?v=1741187918" alt="Producto 4" class="w-full h-48 object-cover">
+          <img
+            src="https://co.tiendasishop.com/cdn/shop/files/IMG-16751976_a1d13a6f-4c4e-41b0-ba6b-d45339828b78_grande.jpg?v=1741187918"
+            alt="Producto 4" class="w-full h-48 object-cover">
           <div class="p-4">
             <h3 class="text-lg font-semibold text-gray-800">MacBook PRo 16 Pulgadas</h3>
             <p class="text-gray-600">$4999.99</p>
-            <a href="/product/4" class="block mt-4 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg">
+            <a href="/product/4"
+              class="block mt-4 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg">
               Ver Detalles
             </a>
           </div>
@@ -98,3 +121,145 @@
     </div>
   </section>
 </div>
+
+<section class="py-16 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-3xl font-bold mb-4">¡Suscríbete y recibe ofertas exclusivas!</h2>
+    <p class="mb-6">Sé el primero en enterarte de nuevos productos y promociones.</p>
+    <form class="flex flex-col sm:flex-row justify-center gap-4 max-w-xl mx-auto animate-fade-up">
+      <input type="email" placeholder="Tu correo electrónico" class="rounded-lg px-4 py-2 text-gray-800 w-full"
+        required>
+      <button type="submit"
+        class="bg-white text-blue-600 font-semibold px-6 py-2 rounded-lg hover:bg-gray-100 transition">Suscribirme</button>
+    </form>
+  </div>
+</section>
+
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">¿Por qué elegirnos?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="flex flex-col items-center text-center animate-fade-up">
+        <div class="bg-blue-100 text-blue-600 rounded-full p-4 mb-4">
+          <i class="fas fa-shipping-fast text-3xl"></i>
+        </div>
+        <h3 class="font-semibold text-lg mb-2">Envíos rápidos</h3>
+        <p class="text-gray-500">Recibe tus productos en tiempo récord en cualquier parte del país.</p>
+      </div>
+      <div class="flex flex-col items-center text-center animate-fade-up" style="animation-delay: 0.2s;">
+        <div class="bg-green-100 text-green-600 rounded-full p-4 mb-4">
+          <i class="fas fa-lock text-3xl"></i>
+        </div>
+        <h3 class="font-semibold text-lg mb-2">Pago seguro</h3>
+        <p class="text-gray-500">Tus datos y transacciones están protegidos con la mejor tecnología.</p>
+      </div>
+      <div class="flex flex-col items-center text-center animate-fade-up" style="animation-delay: 0.4s;">
+        <div class="bg-yellow-100 text-yellow-600 rounded-full p-4 mb-4">
+          <i class="fas fa-star text-3xl"></i>
+        </div>
+        <h3 class="font-semibold text-lg mb-2">Calidad garantizada</h3>
+        <p class="text-gray-500">Solo trabajamos con productos originales y de alta calidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">Lo que dicen nuestros clientes</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-white p-6 rounded-lg shadow-lg animate-fade-up">
+        <p class="text-gray-600 italic mb-4">"¡Excelente servicio y productos de calidad! Volveré a comprar."</p>
+        <div class="flex items-center gap-3">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-10 h-10 rounded-full" alt="Cliente">
+          <span class="font-semibold text-gray-800">Carlos M.</span>
+        </div>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-lg animate-fade-up" style="animation-delay: 0.2s;">
+        <p class="text-gray-600 italic mb-4">"La entrega fue rapidísima y el producto llegó en perfecto estado."</p>
+        <div class="flex items-center gap-3">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-10 h-10 rounded-full" alt="Cliente">
+          <span class="font-semibold text-gray-800">María G.</span>
+        </div>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-lg animate-fade-up" style="animation-delay: 0.4s;">
+        <p class="text-gray-600 italic mb-4">"Atención al cliente muy amable y resolvieron todas mis dudas."</p>
+        <div class="flex items-center gap-3">
+          <img src="https://randomuser.me/api/portraits/men/65.jpg" class="w-10 h-10 rounded-full" alt="Cliente">
+          <span class="font-semibold text-gray-800">Luis P.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Marcas asociadas -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-gray-800 text-center mb-10">Nuestras Marcas Aliadas</h2>
+    <div class="flex flex-wrap justify-center items-center gap-8"> <img
+        src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple"
+        class="h-12 grayscale hover:grayscale-0 transition duration-300"> <img
+        src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google"
+        class="h-12 grayscale hover:grayscale-0 transition duration-300"> <img
+        src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft"
+        class="h-12 grayscale hover:grayscale-0 transition duration-300"> <img
+        src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" alt="IBM"
+        class="h-12 grayscale hover:grayscale-0 transition duration-300"> <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Samsung_Black_icon.svg/500px-Samsung_Black_icon.svg.png" alt="Samsung"
+        class="h-12 grayscale hover:grayscale-0 transition duration-300"> </div>
+  </div>
+</section> <!-- Preguntas frecuentes (FAQ) -->
+<section class="py-16 bg-gray-100">
+  <div class="container mx-auto px-4 max-w-3xl">
+    <h2 class="text-3xl font-bold text-gray-800 text-center mb-10">Preguntas Frecuentes</h2>
+    <div class="space-y-6">
+      <details class="bg-white rounded-lg shadow p-4 group transition-all duration-300">
+        <summary class="cursor-pointer font-semibold text-lg text-gray-700 group-open:text-blue-600 transition-colors">
+          ¿Cuánto tarda el envío?</summary>
+        <p class="mt-2 text-gray-600">El envío tarda entre 1 y 3 días hábiles dependiendo de tu ubicación.</p>
+      </details>
+      <details class="bg-white rounded-lg shadow p-4 group transition-all duration-300">
+        <summary class="cursor-pointer font-semibold text-lg text-gray-700 group-open:text-blue-600 transition-colors">
+          ¿Puedo pagar contra entrega?</summary>
+        <p class="mt-2 text-gray-600">Sí, ofrecemos pago contra entrega en la mayoría de ciudades principales.</p>
+      </details>
+      <details class="bg-white rounded-lg shadow p-4 group transition-all duration-300">
+        <summary class="cursor-pointer font-semibold text-lg text-gray-700 group-open:text-blue-600 transition-colors">
+          ¿Qué métodos de pago aceptan?</summary>
+        <p class="mt-2 text-gray-600">Aceptamos tarjetas de crédito, débito, PSE y pagos en efectivo en puntos
+          autorizados.</p>
+      </details>
+    </div>
+  </div>
+</section> <!-- Contador animado de logros -->
+<section class="py-16 bg-gradient-to-r from-indigo-600 to-blue-500 text-white">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <div class="text-5xl font-bold mb-2 animate-pulse">+10k</div>
+        <div class="text-lg">Clientes felices</div>
+      </div>
+      <div>
+        <div class="text-5xl font-bold mb-2 animate-bounce">99%</div>
+        <div class="text-lg">Satisfacción</div>
+      </div>
+      <div>
+        <div class="text-5xl font-bold mb-2 animate-pulse">24/7</div>
+        <div class="text-lg">Soporte</div>
+      </div>
+      <div>
+        <div class="text-5xl font-bold mb-2 animate-bounce">+500</div>
+        <div class="text-lg">Productos</div>
+      </div>
+    </div>
+  </div>
+</section> <!-- Mapa de ubicación -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">¿Dónde estamos?</h2>
+    <div class="flex justify-center"> <iframe class="rounded-lg shadow-lg w-full max-w-2xl h-72"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8291.140537345764!2d-77.29355779378788!3d1.1841775514381003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2ed30075db8ed7%3A0xdec8d45ac85f302!2sBellavista!5e0!3m2!1ses-419!2sco!4v1748965456532!5m2!1ses-419!2sco"
+        style="border:0;" allowfullscreen="" loading="lazy"></iframe> </div>
+  </div>
+</section>
