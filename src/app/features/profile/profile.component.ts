@@ -45,19 +45,13 @@ interface UserPreferences {
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit {
-  // Datos del usuario
+  //atributos
   user: User | null = null;
   
-  // Formulario para editar perfil
   profileForm: FormGroup;
-  
-  // Estado del formulario
   isSubmitting = false;
-  
-  // Historial de pedidos
   orders: Order[] = [];
   
-  // Preferencias de usuario
   preferences: UserPreferences = {
     emailNotifications: true,
     cartReminders: false
@@ -78,17 +72,11 @@ export class ProfileComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    // Cargar datos del usuario
     this.loadUserData();
-    
-    // Cargar historial de pedidos
     this.loadOrderHistory();
-    
-    // Cargar preferencias
     this.loadPreferences();
   }
   
-  // Cargar datos del usuario (simulado)
   loadUserData(): void {
     // Simulamos una carga de datos de API
     setTimeout(() => {
